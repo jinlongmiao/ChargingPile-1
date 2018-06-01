@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.BatteryMapper">
+
+    <insert id="addBatteryType">
+        INSERT INTO t_battery_type (type_code,type_name) VALUES
+        (#{typeCode},#{typeName})
+    </insert>
+
+    <delete id="deleteBatteryTypeById">
+        DELETE FROM t_battery_type where id = #{id}
+    </delete>
+
+    <update id="updateBatteryTypeById">
+        UPDATE t_battery_type SET type_code=#{typeCode},type_name=#{typeName} WHERE id = #{id}
+    </update>
+
+    <select id="batteryTypeList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        ps.id,
+        ps.type_code AS typeCode,
+        ps.type_name AS typeName
+        FROM
+        `t_battery_type` ps
+        ORDER BY
+        ps.id DESC
+        limit #{offSet}, #{pageRow}
+    </select>
+
+    <select id="typeCount" resultType="Integer">
+        SELECT  count(0) FROM t_battery_type
+    </select>
+</mapper>

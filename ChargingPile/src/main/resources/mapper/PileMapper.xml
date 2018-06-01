@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.PileMapper">
+    <resultMap id="BaseResultMap" type="com.swust.back.model.PileType">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="type_code" jdbcType="CHAR" property="typeCode" />
+        <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+        <result column="wi" jdbcType="VARCHAR" property="wi" />
+        <result column="port" jdbcType="TINYINT" property="port" />
+        <result column="type" jdbcType="CHAR" property="type" />
+    </resultMap>
+
+    <select id="typeCount" resultType="Integer">
+        SELECT  count(0) FROM t_pile_type
+    </select>
+
+    <select id="typeList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        pt.id,
+        pt.wi,
+        pt.PORT as port,
+        pt.type,
+        pt.type_code AS typeCode,
+        pt.type_name AS typeName
+        FROM
+        `t_pile_type` pt
+        ORDER BY
+        pt.id DESC
+        limit #{offSet}, #{pageRow}
+    </select>
+
+    <insert id="addPileType">
+      INSERT INTO t_pile_type (type_code,type_name,wi,port,type) VALUES
+      (#{typeCode},#{typeName},#{wi},#{port},#{type})
+    </insert>
+
+    <delete id="deletePileTypeById">
+        DELETE FROM t_pile_type where id = #{id}
+    </delete>
+
+    <update id="updatePileTypeById">
+        UPDATE t_pile_type SET type_code=#{typeCode},type_name=#{typeName},wi=#{wi},port=#{port},
+        type=#{port} WHERE id = #{id}
+    </update>
+
+
+    <insert id="addPileState">
+        INSERT INTO t_pile_state (state_code,state_name) VALUES
+        (#{stateCode},#{stateName})
+    </insert>
+
+    <delete id="deletePileStateById">
+        DELETE FROM t_pile_state where id = #{id}
+    </delete>
+
+    <update id="updatePileStateById">
+        UPDATE t_pile_state SET state_code=#{stateCode},state_name=#{stateName} WHERE id = #{id}
+    </update>
+
+    <select id="stateList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        ps.id,
+        ps.state_code AS stateCode,
+        ps.state_name AS stateName
+        FROM
+        `t_pile_state` ps
+        ORDER BY
+        ps.id DESC
+        limit #{offSet}, #{pageRow}
+    </select>
+
+    <select id="stateCount" resultType="Integer">
+        SELECT  count(0) FROM t_pile_state
+    </select>
+</mapper>

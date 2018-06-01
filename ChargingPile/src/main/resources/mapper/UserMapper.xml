@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.swust.back.model.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="SMALLINT" property="id" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="password" jdbcType="CHAR" property="password" />
+    <result column="bind_account" jdbcType="VARCHAR" property="bindAccount" />
+    <result column="dwdm" jdbcType="VARCHAR" property="dwdm" />
+    <result column="last_login_time" jdbcType="INTEGER" property="lastLoginTime" />
+    <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
+    <result column="login_count" jdbcType="INTEGER" property="loginCount" />
+    <result column="verify" jdbcType="VARCHAR" property="verify" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="INTEGER" property="createTime" />
+    <result column="update_time" jdbcType="INTEGER" property="updateTime" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="max_number" jdbcType="TINYINT" property="maxNumber" />
+    <result column="info" jdbcType="LONGVARCHAR" property="info" />
+  </resultMap>
+
+  <select id="selectUser" resultType="com.swust.back.model.User">
+    SELECT
+        USER. *,
+        USER. create_time as createTime,
+        role. id as "roleId"
+    FROM
+        t_role role,
+        t_role_user ru,
+        t_user USER
+    WHERE
+        role.id = ru.role_id
+    AND ru.user_id = USER .id
+    AND USER .id = #{id};
+  </select>
+
+    <select id="countUser" resultType="Integer">
+        SELECT count(0)
+        FROM t_user
+    </select>
+
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO t_user
+        (account, password, nickname, bind_account, dwdm, email, remark, create_time, update_time,status, info, max_number) VALUES
+        (#{username}, #{password}, #{nickname},'', '0101', '', '', UNIX_TIMESTAMP(), 0, 1, '', 0)
+    </insert>
+
+    <insert id="addRoleUser" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO t_role_user
+        (role_id, user_id) VALUES
+        (#{roleId}, #{userId})
+    </insert>
+
+    <update id="updateUser" parameterType="java.util.Map">
+        UPDATE t_user
+        SET
+        nickname = #{nickname},
+        update_time = UNIX_TIMESTAMP()
+        <if test="password !='' and password !=null">
+            , password = #{password}
+        </if>
+        WHERE id = #{userId}
+    </update>
+
+    <update id="updateRoleUser">
+        UPDATE t_role_user
+        SET
+        role_id = #{roleId}
+        WHERE
+        user_id = #{userId}
+    </update>
+
+    <resultMap id="userMap" type="com.swust.back.util.model.One2Many">
+        <id column="userId" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="roleId" property="roleId"/>
+        <result column="roleName" property="roleName"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+    <select id="listUser" resultMap="userMap">
+        SELECT
+            t.id as userId,
+            t.account as username,
+            DATE_FORMAT(from_unixtime(t.create_time),'%Y.%m.%d %T') as createTime,
+            DATE_FORMAT(from_unixtime(t.update_time),'%Y.%m.%d %T') as updateTime,
+            t.nickname as nickname,
+            ru.role_id as roleId,
+            r.name as roleName
+        FROM
+            `t_user` t
+        LEFT JOIN t_role_user ru ON t.id = ru.user_id
+        LEFT JOIN t_role r ON ru.role_id = r.id;
+    </select>
+
+    <select id="getAllRoles" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            id roleId,
+            `name` roleName
+        FROM
+            t_role
+    </select>
+
+    <select id="queryExistUsername" resultType="int">
+        select count(0)
+        from t_user
+        WHERE account=#{username};
+    </select>
+
+    <select id="queryExistUserIdInRoleUser" resultType="int">
+        select count(0)
+        from t_role_user
+        WHERE user_id=#{userId};
+    </select>
+
+  <select id="selectUserByAccount" resultType="com.swust.back.model.User">
+    SELECT
+    USER. *,
+    USER. create_time as createTime,
+    role. id as "roleId",
+    role. name as "roleName"
+    FROM
+    t_role role,
+    t_role_user ru,
+    t_user USER
+    WHERE
+    role.id = ru.role_id
+    AND ru.user_id = USER .id
+    AND USER .account = #{account};
+  </select>
+
+  <resultMap id="roleMap" type="com.swust.back.util.model.One2Many">
+    <id column="roleId" property="roleId"/>
+    <result column="roleName" property="roleName"/>
+    <collection property="users" ofType="com.alibaba.fastjson.JSONObject">
+      <id column="userId" property="userId"/>
+      <result column="nickname" property="nickname"/>
+    </collection>
+    <collection property="menus" ofType="com.swust.back.util.model.One2Many">
+      <id column="menuCode" property="menuCode"/>
+      <result column="menuName" property="menuName"/>
+      <collection property="permissions" ofType="com.alibaba.fastjson.JSONObject">
+        <id column="permissionId" property="permissionId"/>
+        <result column="permissionName" property="permissionName"/>
+      </collection>
+    </collection>
+  </resultMap>
+  <select id="listRole" resultMap="roleMap">
+    SELECT
+        a.role_id as roleId,
+        a.node_id AS permissionId,
+        n.title AS permissionName,
+        m.name as menuCode,
+        m.title as menuName,
+        r.`name` as roleName,
+        ru.user_id as userId,
+        u.nickname
+    FROM
+        t_access a
+    LEFT JOIN t_node n ON a.node_id = n.id
+    LEFT JOIN t_node m ON a.pid = m.id
+    LEFT JOIN t_role r on a.role_id = r.id
+    LEFT JOIN t_role_user ru on a.role_id = ru.role_id
+    LEFT JOIN t_user u ON ru.user_id = u.id
+    WHERE
+        a.`level` = 3
+    ORDER BY
+        a.role_id , m.title
+  </select>
+
+  <resultMap id="permissionMap" type="com.swust.back.util.model.One2Many">
+    <id column="menuName" property="menuName"/>
+    <collection property="permissions" ofType="com.alibaba.fastjson.JSONObject">
+      <id column="id" property="id"/>
+      <result column="permissionName" property="permissionName"/>
+      <result column="requiredPerm" property="requiredPerm" javaType="Integer"/>
+    </collection>
+  </resultMap>
+  <select id="listAllPermission" resultMap="permissionMap">
+    SELECT
+        n.id AS id,
+        m.title AS menuName,
+        n.title AS permissionName
+    FROM
+        `t_node` n
+    LEFT JOIN t_node m ON n.pid = m.id
+    WHERE
+        n.`level` = 3
+    ORDER BY
+        m.title;
+  </select>
+
+
+    <resultMap id="aRole" type="com.swust.back.util.model.One2Many">
+        <id column="roleId" property="roleId"/>
+        <result column="roleName" property="roleName"/>
+        <collection property="users" ofType="com.alibaba.fastjson.JSONObject">
+            <id column="userId" property="userId"/>
+        </collection>
+        <collection property="permissionIds" ofType="Integer">
+            <id column="permissionId" property="permissionId"/>
+        </collection>
+    </resultMap>
+    <select id="getRoleAllInfo" resultMap="aRole">
+        SELECT
+            r.id AS roleId,
+            r.name AS roleName,
+            ru.user_id AS userId,
+            a.node_id AS permissionId
+        FROM
+            t_role r
+        LEFT JOIN t_role_user ru ON r.id = ru.role_id
+        LEFT JOIN t_access a ON a.role_id = r.id
+        WHERE
+            a.`level` = 3
+        AND a.role_id = #{roleId}
+    </select>
+
+    <update id="updateRoleName">
+        UPDATE t_role
+        SET name = #{roleName},
+        update_time = UNIX_TIMESTAMP()
+        WHERE
+            id = #{roleId};
+    </update>
+
+    <insert id="insertRolePermission">
+        INSERT INTO t_access (role_id, node_id, level, pid)
+        VALUES
+        <foreach collection="permissions" item="item" index="index" separator=",">
+            (#{roleId}, #{item},3,(
+            SELECT
+                pid
+            FROM
+                t_node
+            WHERE
+                id = #{item}))
+        </foreach>
+
+    </insert>
+
+    <delete id="removeOldPermission">
+      DELETE
+      FROM
+        t_access
+      WHERE
+      role_id = #{roleId}
+      AND node_id IN
+      <foreach collection="permissions" item="item" index="index" open="(" separator="," close=")">
+          #{item}
+      </foreach>
+    </delete>
+
+    <delete id="deleteByIdInUser">
+        DELETE FROM t_user WHERE id = #{userId}
+    </delete>
+    <delete id="deleteByIdInRoleUser">
+        DELETE FROM t_role_user WHERE user_id = #{userId}
+    </delete>
+
+    <insert id="insertRole" useGeneratedKeys="true" keyProperty="roleId">
+        INSERT INTO `t_role` (
+            `id`,
+            `name`,
+            `pid`,
+            `status`,
+            `remark`,
+            `ename`,
+            `create_time`,
+            `update_time`,
+            `level`
+        )
+        VALUES
+        (
+            NULL,
+            #{roleName},
+            '0',
+            '1',
+            '',
+            '',
+            UNIX_TIMESTAMP(),
+            UNIX_TIMESTAMP(),
+            NULL
+        )
+    </insert>
+
+    <delete id="removeRole">
+        DELETE
+        FROM
+        t_role
+        WHERE
+        id = #{roleId}
+    </delete>
+
+    <delete id="removeRoleAllPermission">
+        DELETE
+        FROM
+        t_access
+        WHERE
+        role_id = #{roleId}
+    </delete>
+</mapper>

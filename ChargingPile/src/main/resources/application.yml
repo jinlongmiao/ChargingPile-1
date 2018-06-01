@@ -1,0 +1,11 @@
+spring:
+  datasource:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/chargingpile?tinyInt1isBit=false&useSSL=true
+      username: root
+      password: lqc13890
+mybatis:
+   mapperLocations: classpath:/mapper/*.xml
+server:
+  port: 8989
+

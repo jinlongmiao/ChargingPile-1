@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.AccessMapper">
+  <resultMap id="BaseResultMap" type="com.swust.back.model.Access">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="role_id" jdbcType="SMALLINT" property="roleId" />
+    <result column="node_id" jdbcType="SMALLINT" property="nodeId" />
+    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="pid" jdbcType="SMALLINT" property="pid" />
+    <result column="module" jdbcType="VARCHAR" property="module" />
+  </resultMap>
+
+    <select id="selectRolePermissionsArray" resultType="map">
+        SELECT
+        access. node_id as id,
+        node. name as route,
+        node.title as name,
+        gp.id as parent_id,
+        gp.name as groupRoute,
+        gp.title as groupName
+        FROM
+        t_access access,
+        t_node node,
+        t_group gp
+        WHERE
+        access.role_id = #{roleId}
+        AND node.status = 1
+        AND access.level = 2
+        AND access.node_id = node.id
+        AND gp.id = node.group_id;
+    </select>
+
+    <select id="selectByNodeId" resultMap="BaseResultMap">
+        SELECT *
+        FROM
+        t_access
+        WHERE
+        node_id = #{nodeId};
+    </select>
+
+    <select id="getMenus" resultType="String">
+        SELECT
+        node.name
+        FROM
+        t_access access,
+        t_node node
+        WHERE
+        access.role_id = #{roleId}
+        AND access.node_id = node.id
+		AND access.`level` = 2;
+    </select>
+
+    <select id="getPermissions" resultType="map">
+    SELECT
+        t.*, n. NAME AS pName
+    FROM
+        (
+            SELECT
+                access.node_id AS nodeId,
+                node. NAME as name,
+                access.pid,
+                access.`level`
+            FROM
+                t_access access,
+                t_node node
+            WHERE
+                access.role_id = #{roleId}
+            AND access.`level` = 3
+            AND access.node_id = node.id
+            ORDER BY
+                node.`level` DESC
+        ) t,
+        t_node n
+    WHERE
+        t.pid = n.id;
+    </select>
+</mapper>
