@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.operation.AlipaytradeMapper">
+
+    <select id="list" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        id,
+        telephone,
+        out_trade_no AS outTradeNo,
+        trade_no AS  tradeNo,
+        subject,
+        total_amount AS totalAmount,
+        DATE_FORMAT(notify_time, '%Y.%m.%d %T') AS notifyTime,
+        buyer_logon_id AS buyerLoginId,
+        notify_type AS notifyType,
+        trade_status AS tradeStatus
+        FROM
+        `t_app_alipaytrade`
+        <where>
+          <if test="startTime != null and startTime != ''">
+              notify_time between #{startTime} and #{endTime}
+          </if>
+          <if test="telephone != '' and telephone !=null">
+              AND telephone = #{telephone}
+          </if>
+        </where>
+        ORDER BY id
+        <choose>
+            <when test="order == 'ASC'">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        limit #{offSet}, #{pageRow}
+    </select>
+
+    <select id="typeCount" resultType="Integer">
+        SELECT  count(0) FROM `t_app_alipaytrade`
+        <where>
+            <if test="startTime != null and startTime != ''">
+                notify_time between #{startTime} and #{endTime}
+            </if>
+            <if test="telephone != '' and telephone !=null">
+                AND telephone = #{telephone}
+            </if>
+        </where>
+    </select>
+
+    <select id="getSumMoneyByCondition" resultType="FLOAT">
+        SELECT IFNULL(sum(total_amount),0) FROM `t_app_alipaytrade`
+        <where>
+            <if test="startTime != null and startTime != ''">
+                notify_time between #{startTime} and #{endTime}
+            </if>
+            <if test="telephone != '' and telephone !=null">
+                AND telephone = #{telephone}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

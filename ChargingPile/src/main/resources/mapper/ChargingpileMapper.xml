@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.operation.ChargingpileMapper">
+
+    <insert id="addChargingpile">
+        INSERT INTO t_chargingpile (gateid,pileid,pile_type_code,stationid,state_update_time,reservation_state) VALUES
+        (#{gateId},#{pileId},#{pileTypeCode},#{stationId},NOW(),0)
+    </insert>
+
+    <delete id="deleteChargingpileById">
+        DELETE FROM t_chargingpile where id = #{id}
+    </delete>
+
+    <update id="updateChargingpileById">
+        UPDATE t_chargingpile SET gateid=#{gateId},pileid=#{pileId},pile_type_code=#{pileTypeCode},
+        stationid = #{stationId},state_update_time = NOW() WHERE id = #{id}
+    </update>
+
+    <select id="chargingpileList" resultType="com.alibaba.fastjson.JSONObject">
+    SELECT
+        tcp.id,
+        tcs.stationname AS stationName,
+        tcp.gateid AS gateId,
+        tcp.pileid AS pileId,
+        tcp.pile_type_code AS pileTypeCode,
+        tcp.stationid AS stationId,
+        tcp. STATUS
+    FROM
+        `t_chargingpile` tcp
+    LEFT JOIN t_chargingstation tcs ON tcp.stationid = tcs.stationid
+    <choose>
+        <when test="orderByStation != null and orderByStation != '' ">
+            ORDER BY tcs.stationname
+            <if test="orderByStation == 'ASC'">ASC</if>
+            <if test="orderByStation == 'DESC' ">DESC</if>
+        </when>
+        <when test="orderByGate != null and orderByGate != ''">
+            ORDER BY tcp.gateid
+            <if test="orderByGate == 'ASC'">ASC</if>
+            <if test="orderByGate == 'DESC' ">DESC</if>
+        </when>
+        <otherwise>
+            ORDER BY tcp.id
+        </otherwise>
+    </choose>
+    limit #{offSet}, #{pageRow}
+    </select>
+
+    <select id="pileCount" resultType="Integer">
+        SELECT  count(0) FROM t_chargingpile
+    </select>
+
+    <select id="getStationInfo" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT id, stationid as stationId,stationname as stationName FROM t_chargingstation
+    </select>
+
+    <select id="getAllPileType" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT id, type_code as typeCode,type_name as typeName, wi, port FROM t_pile_type
+    </select>
+</mapper>

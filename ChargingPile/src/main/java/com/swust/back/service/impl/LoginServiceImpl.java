@@ -1,15 +1,13 @@
 package com.swust.back.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.swust.back.dao.UserMapper;
+import com.swust.back.dao.app.UserMapper;
 import com.swust.back.model.User;
-import com.swust.back.service.AccessService;
+import com.swust.back.service.app.AccessService;
 import com.swust.back.service.LoginService;
 import com.swust.back.util.CommonUtil;
-import com.swust.back.util.CustomUtils;
 import com.swust.back.util.MD5;
 import com.swust.back.util.constants.Constants;
-import com.swust.back.web.LoginController;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.session.Session;

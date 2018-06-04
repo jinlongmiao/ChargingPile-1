@@ -2,24 +2,21 @@ package com.swust.back.config.system;
 
 import com.swust.back.model.User;
 import com.swust.back.model.UserLog;
-import com.swust.back.service.UserLogService;
+import com.swust.back.service.app.UserLogService;
 import com.swust.back.util.constants.Constants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.core.MethodParameter;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 public class LogInterceptor implements HandlerInterceptor {
     private Logger logger = LoggerFactory.getLogger(LogInterceptor.class);

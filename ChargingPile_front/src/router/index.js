@@ -57,130 +57,130 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/datadict',
+    path: '/Datadict',
     component: Layout,
-    redirect: '/datadict/PileType',
+    redirect: '/Datadict/PileType',
     name: '基础数据字典',
     meta: {title: '基础数据字典', icon: 'tree'},
     children: [
       {
         path: 'BatteryType',
         name: '电池类型代码',
-        component: _import('datadict/BatteryType'),
+        component: _import('Datadict/BatteryType'),
         meta: {title: '电池类型代码', icon: 'batteryType'},
         menu: 'BatteryType'
       },
       {
         path: 'PileState',
         name: '电桩状态代码',
-        component: _import('datadict/PileState'),
+        component: _import('Datadict/PileState'),
         meta: {title: '电桩状态代码', icon: 'pileState'},
         menu: 'PileState'
       },
       {
         path: 'PileType',
         name: '电桩类型代码',
-        component: _import('datadict/PileType'),
+        component: _import('Datadict/PileType'),
         meta: {title: '电桩类型代码', icon: 'PileType'},
         menu: 'BatteryType'
       },
       {
         path: 'Area',
         name: '区域代码',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '区域代码', icon: 'example'},
         menu: 'BatteryType'
       },
     ]
   },
   {
-    path: '/datadict',
+    path: '/Operation',
     component: Layout,
-    redirect: '/datadict',
+    redirect: '/Operation/AppAlipaytrade',
     name: '综合运维服务',
     meta: {title: '综合运维服务', icon: 'eye'},
     children: [
       {
         path: 'AppAlipaytrade',
         name: '支付宝充值订单',
-        component: _import('user/role'),
-        meta: {title: '支付宝充值订单', icon: 'example'},
+        component: _import('Operation/AppAlipaytrade'),
+        meta: {title: '支付宝充值订单', icon: 'alipay'},
         menu: 'AppAlipaytrade'
       },
       {
         path: 'ChargeQuery',
         name: '充电查询',
-        component: _import('user/user'),
+        component: _import('App/User'),
         meta: {title: '充电查询', icon: 'example'},
         menu: 'ChargeQuery'
       },
       {
         path: 'PileOff',
         name: '故障设备',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '故障设备', icon: 'example'},
         menu: 'PileOff'
       },
       {
         path: 'chargeCount',
         name: '充电统计',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '充电统计', icon: 'example'},
         menu: 'chargeCount'
       },
       {
         path: 'RateType',
         name: '费率标准设置',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '费率标准设置', icon: 'example'},
         menu: 'RateType'
       },
       {
         path: 'VChargingProc',
         name: '实时充电数据监测',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '实时充电数据监测', icon: 'example'},
         menu: 'VChargingProc'
       },
       {
         path: 'AppEmptycards',
         name: 'App卡库管理',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: 'App卡库管理', icon: 'example'},
         menu: 'AppEmptycards'
       },
       {
         path: 'pileservicedata',
         name: '充电桩运行数据',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '充电桩运行数据', icon: 'example'},
         menu: 'pileservicedata'
       },
       {
         path: 'Chargingstation',
         name: '充电站管理',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '充电站管理', icon: 'example'},
         menu: 'Chargingstation'
       },
       {
         path: 'Chargingpile',
         name: '充电桩管理',
-        component: _import('user/role'),
-        meta: {title: '充电桩管理', icon: 'example'},
+        component: _import('Operation/Chargingpile'),
+        meta: {title: '充电桩管理', icon: 'PileType'},
         menu: 'Chargingpile'
       },
       {
         path: 'Customer',
         name: '充电卡管理',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '充电卡管理', icon: 'example'},
         menu: 'Customer'
       },
       {
         path: 'service',
         name: '综合运行数据',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '综合运行数据', icon: 'example'},
         menu: 'service'
       }
@@ -196,28 +196,28 @@ export const asyncRouterMap = [
       {
         path: 'PileTransStep3',
         name: '充电电能数据',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '充电电能数据', icon: 'example'},
         menu: 'PileTransStep3'
       },
       {
         path: 'SocketDtl',
         name: '网关通讯',
-        component: _import('user/user'),
+        component: _import('App/User'),
         meta: {title: '网关通讯', icon: 'example'},
         menu: 'SocketDtl'
       },
       {
         path: 'PileTrans',
         name: '充电交易流水',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '充电交易流水', icon: 'example'},
         menu: 'PileTrans'
       },
       {
         path: 'VCProc',
         name: '充电过程数据',
-        component: _import('user/role'),
+        component: _import('App/Role'),
         meta: {title: '充电过程数据', icon: 'example'},
         menu: 'VCProc'
       },
