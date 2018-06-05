@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.operation.PileDataMapper">
+
+    <select id="pileDataList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        *,
+        pileid as pileId,
+        stationid as stationId
+        FROM
+        `t_pileservicedata`
+        <where>
+            <if test="startTime != null and startTime != ''">
+                start_date between #{startTime} and #{endTime}
+            </if>
+            <if test="stationid != '' and stationid !=null">
+                AND stationid = #{stationid}
+            </if>
+        </where>
+        limit #{offSet}, #{pageRow}
+
+    </select>
+
+    <select id="pileDataCount" resultType="Integer">
+        SELECT  count(0) FROM t_pileservicedata
+    </select>
+
+</mapper>

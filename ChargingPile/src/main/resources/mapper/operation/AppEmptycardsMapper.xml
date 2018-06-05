@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.operation.AppEmptycardsMapper">
+    <sql id="choose">
+        <where>
+            <if test="phone != null and phone != ''">
+              phone = #{phone}
+            </if>
+            <if test="chargeCardId != '' and chargeCardId !=null">
+                AND charge_card_id = #{chargeCardId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="AppEmptycardsList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        id,
+        phone,
+        card_state as cardState,
+        charge_card_id as chargeCardId,
+        create_time as createTime,
+        create_user as createUser,
+        status
+        FROM
+        `t_app_emptycards`
+        <include refid="choose"/>
+        limit #{offSet}, #{pageRow}
+    </select>
+
+
+    <select id="allCount" resultType="Integer">
+        SELECT  count(0) FROM t_app_emptycards
+        <include refid="choose"/>
+    </select>
+
+    <delete id="deleteAppEmptycardsById">
+        DELETE FROM t_app_emptycards where id = #{id}
+    </delete>
+
+    <insert id="add">
+        INSERT INTO t_app_emptycards
+        (charge_card_id,create_user,status)
+        VALUES
+        (#{chargeCardId},#{createUser},1)
+    </insert>
+</mapper>

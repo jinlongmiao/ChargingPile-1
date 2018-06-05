@@ -1,10 +1,10 @@
-package com.swust.back.service.impl;
+package com.swust.back.service.app.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.swust.back.dao.app.UserMapper;
 import com.swust.back.model.User;
 import com.swust.back.service.app.AccessService;
-import com.swust.back.service.LoginService;
+import com.swust.back.service.app.LoginService;
 import com.swust.back.util.CommonUtil;
 import com.swust.back.util.MD5;
 import com.swust.back.util.constants.Constants;

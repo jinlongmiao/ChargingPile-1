@@ -1,4 +1,4 @@
-package com.swust.back.service;
+package com.swust.back.service.app;
 
 import com.alibaba.fastjson.JSONObject;
 import com.swust.back.model.User;

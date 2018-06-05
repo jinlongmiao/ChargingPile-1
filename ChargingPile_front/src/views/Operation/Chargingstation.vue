@@ -20,10 +20,10 @@
       <el-table-column align="center" label="地址" prop="address" width="170"></el-table-column>
       <el-table-column align="center" label="经度" prop="lat" width="170"></el-table-column>
       <el-table-column align="center" label="纬度" prop="lng" width="170"></el-table-column>
-      <el-table-column align="center" label="桩数" prop="capacity" width="170"></el-table-column>
+      <el-table-column align="center" label="桩数" prop="capacity" width="70"></el-table-column>
       <el-table-column align="center" label="网关ID" prop="gateId" width="170"></el-table-column>
-      <el-table-column align="center" label="运行日期" prop="createTime" width="170"></el-table-column>
-      <el-table-column align="center" label="状态" prop="STATUS" width="170"></el-table-column>
+      <el-table-column align="center" label="运行日期" prop="openDate" width="170"></el-table-column>
+      <el-table-column align="center" label="状态" prop="status" width="70"></el-table-column>
       <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" v-if="hasPerm('Public:edit')" @click="showUpdate(scope.$index)">修改</el-button>
@@ -46,10 +46,10 @@
         <el-form-item label="城市" >
           <el-select v-model="tempData.city" placeholder="请选择">
             <el-option
-              v-for="item in stationNames"
-              :key="item.id"
-              :label="item.stationName"
-              :value="item.stationId">
+              v-for="item in options"
+              :key="item.city"
+              :label="item.city"
+              :value="item.city">
             </el-option>
           </el-select>
         </el-form-item>
@@ -69,6 +69,10 @@
           <el-input type="text" v-model="tempData.address">
           </el-input>
         </el-form-item>
+        <el-form-item label="桩数" >
+          <el-input type="text" v-model="tempData.capacity">
+          </el-input>
+        </el-form-item>
         <el-form-item label="经度" >
           <el-input type="text" v-model="tempData.lat">
           </el-input>
@@ -77,9 +81,14 @@
           <el-input type="text" v-model="tempData.lng">
           </el-input>
         </el-form-item>
-        <el-form-item label="运行日期" >
-          <el-input type="text" v-model="tempData.createTime">
-          </el-input>
+        <el-form-item label="运行日期" v-if="dialogStatus=='create'">
+          <el-date-picker
+            v-model="tempData.openDate"
+            type="datetime"
+            placeholder="选择日期时间"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -92,6 +101,7 @@
 </template>
 <script>
   import {mapGetters} from 'vuex'
+  import * as util from '@/utils/index.js'
 
   export default {
     data() {
@@ -117,19 +127,25 @@
           address: '',
           lat: '',
           lng: '',
+          openDate: '',
           capacity: '',
           createTime: '',
           gateId: '',
-          STATUS:''
+          status:'',
+          createUser: ''
         },
+        options: []
       }
     },
     created() {
       this.getList();
+      this.tempData.createUser = this.nickname;
+      // console.log(this);
     },
     computed: {
       ...mapGetters([
-        'userId'
+        'userId',
+        'nickname'
       ])
     },
     methods: {
@@ -141,15 +157,24 @@
           method: "get",
           params: this.listQuery
         }).then(data => {
+          // console.log(data);
           this.listLoading = false;
           this.list = data.list;
+          for (var i = data.list.length - 1; i >= 0; i--) {
+            var temp = {};
+            temp.city = data.list[i].city;
+            if( JSON.stringify(this.options).indexOf(JSON.stringify(temp)) <= 0 ){
+                this.options.push(temp);
+            }
+          }
           this.totalCount = data.totalCount;
         })
       },
       
       createChargingStation() {
-        // console.log(this.tempData);
-        //添加电桩类型
+        this.tempData.createUser = this.nickname;
+        console.log(this.tempData);
+        //添加
         this.api({
           url: "/ChargingStation/add",
           method: "post",
@@ -161,7 +186,7 @@
       },
       removeChargingStation($index) {
         let _vue = this;
-        this.$confirm('确定删除此电桩类型?', '提示', {
+        this.$confirm('确定删除?', '提示', {
           confirmButtonText: '确定',
           showCancelButton: false,
           type: 'warning'
@@ -204,20 +229,18 @@
 
       showCreate() {
         //显示新增对话框
-        this.tempData.id = "";
-        this.tempData.stationName = "";
-        this.tempData.gateId = "";
-        this.tempData.pileId = "";
-        this.tempData.ChargingStationCode = "";
-        this.tempData.stationId = "";
+        for(var Key in this.tempData){
+          if( this.tempData[Key] ){
+            this.tempData[Key] = null;
+          };
+        }
         this.dialogStatus = "create";
         this.dialogFormVisible = true;
       },
       showUpdate($index) {
-        console.log(this.list);
-        console.log($index);
         let ChargingStation = this.list[$index];
-        this.tempData = ChargingStation;
+        this.tempData = util.deepcopy(ChargingStation);
+        // this.tempData = ChargingStation;
         this.dialogStatus = "update"
         this.dialogFormVisible = true
       },

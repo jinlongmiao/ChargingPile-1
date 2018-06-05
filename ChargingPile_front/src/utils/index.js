@@ -34,6 +34,18 @@
    return time_str
  }
 
+//深拷贝
+export const deepcopy = function (source) {
+  if (!source) {
+    return source;
+  }
+  let sourceCopy = source instanceof Array ? [] : {};
+  for (let item in source) {
+    sourceCopy[item] = typeof source[item] === 'object' ? deepcopy(source[item]) : source[item];
+  }
+  return sourceCopy;
+};
+
  export function formatTime(time, option) {
    time = +time * 1000
    const d = new Date(time)

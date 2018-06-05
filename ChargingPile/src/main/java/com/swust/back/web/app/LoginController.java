@@ -1,9 +1,9 @@
-package com.swust.back.web;
+package com.swust.back.web.app;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.swust.back.model.User;
-import com.swust.back.service.LoginService;
+import com.swust.back.service.app.LoginService;
 import com.swust.back.util.CommonUtil;
 import com.swust.back.util.constants.Constants;
 import com.swust.back.util.constants.ErrorEnum;

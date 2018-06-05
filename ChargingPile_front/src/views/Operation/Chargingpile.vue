@@ -77,7 +77,7 @@
 </template>
 <script>
   import {mapGetters} from 'vuex'
-
+  import * as util from '@/utils/index.js'
   export default {
     data() {
       return {
@@ -148,7 +148,6 @@
           method: "get"
         }).then(data => {
           this.stationNames = data.list;
-          // console.log(this.stationNames);
         })
       },
       handleSortChange(column) {

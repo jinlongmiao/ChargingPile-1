@@ -1,4 +1,4 @@
-package com.swust.back.dao;
+package com.swust.back.dao.app;
 
 
 import com.swust.back.model.User;

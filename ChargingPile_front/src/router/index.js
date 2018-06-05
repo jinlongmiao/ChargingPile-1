@@ -145,8 +145,8 @@ export const asyncRouterMap = [
       {
         path: 'AppEmptycards',
         name: 'App卡库管理',
-        component: _import('App/Role'),
-        meta: {title: 'App卡库管理', icon: 'example'},
+        component: _import('Operation/AppEmptycards'),
+        meta: {title: 'App卡库管理', icon: 'appEmptycards'},
         menu: 'AppEmptycards'
       },
       {
@@ -159,15 +159,15 @@ export const asyncRouterMap = [
       {
         path: 'Chargingstation',
         name: '充电站管理',
-        component: _import('App/Role'),
-        meta: {title: '充电站管理', icon: 'example'},
+        component: _import('Operation/Chargingstation'),
+        meta: {title: '充电站管理', icon: 'pileStation'},
         menu: 'Chargingstation'
       },
       {
         path: 'Chargingpile',
         name: '充电桩管理',
         component: _import('Operation/Chargingpile'),
-        meta: {title: '充电桩管理', icon: 'PileType'},
+        meta: {title: '充电桩管理', icon: 'pileType'},
         menu: 'Chargingpile'
       },
       {

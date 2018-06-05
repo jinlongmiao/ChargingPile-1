@@ -44,7 +44,6 @@ public class ChargingpileServiceImpl implements ChargingpileService{
     @Override
     public JSONObject listChargingPile(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
-        CustomUtils.show(jsonObject);
         int count = chargingpileMapper.pileCount();
         List<JSONObject> list = chargingpileMapper.chargingpileList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
@@ -80,14 +79,6 @@ public class ChargingpileServiceImpl implements ChargingpileService{
     @Override
     public JSONObject getStationInfo() {
         List<JSONObject> iList = chargingpileMapper.getStationInfo();
-        // 存放数据
-//        List<JSONObject> jList = new ArrayList<>();
-//        for( JSONObject map : iList ){
-//            JSONObject stationInfo = new JSONObject();
-//            stationInfo.put((String) map.get("stationId"),map.get("stationName"));
-//            jList.add(stationInfo);
-//        }
-//        CustomUtils.show(iList);
         return CommonUtil.successPage(iList);
     }
 }

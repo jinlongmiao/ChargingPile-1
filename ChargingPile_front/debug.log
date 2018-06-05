@@ -1,2 +1,4 @@
 [0604/090619.952:WARNING:minidump_to_upload_parameters.cc(66)] duplicate annotation name metrics_client_id, discarding value 6877fd7b6cab420286c1e65a9d6a31d9
 [0604/090619.968:ERROR:http_transport_win.cc(273)] WinHttpSendRequest: 无法解析服务器的名称或地址 (0x2ee7)
+[0605/081145.417:WARNING:minidump_to_upload_parameters.cc(66)] duplicate annotation name metrics_client_id, discarding value 6877fd7b6cab420286c1e65a9d6a31d9
+[0605/081145.448:ERROR:http_transport_win.cc(273)] WinHttpSendRequest: 无法解析服务器的名称或地址 (0x2ee7)

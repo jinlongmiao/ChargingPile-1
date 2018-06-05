@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.operation.ChargingStationMapper">
+
+    <insert id="add">
+        INSERT INTO
+        t_chargingstation
+        (city,stationid,stationname,address,lat,lng,capacity,gateid,opendate,create_time,create_user)
+        VALUES
+        (#{city},#{stationId},#{stationName},#{address},#{lat},#{lng},#{capacity},#{gateId},#{openDate},NOW(),#{createUser})
+    </insert>
+
+    <delete id="deleteChargingStationById">
+        DELETE FROM t_chargingstation where id = #{id}
+    </delete>
+
+    <update id="updateChargingStationById">
+        UPDATE t_chargingstation SET
+        city=#{city},stationid=#{stationId},stationname=#{stationName},gateid = #{gateId},
+        address = #{address},lat=#{lat},lng=#{lng} WHERE id = #{id}
+    </update>
+
+    <select id="chargingStationList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            id,
+            city,
+            stationid as stationId,
+            stationname as stationName,
+            address,
+            lat,
+            lng,
+            capacity,
+            gateid as gateId,
+            opendate as openDate,
+            create_time as createTime,
+            status
+        FROM
+        `t_chargingstation` limit #{offSet}, #{pageRow}
+    </select>
+
+    <select id="allCount" resultType="Integer">
+        SELECT  count(0) FROM t_chargingstation
+    </select>
+
+</mapper>

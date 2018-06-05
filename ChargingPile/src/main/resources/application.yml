@@ -5,7 +5,9 @@ spring:
       username: root
       password: lqc13890
 mybatis:
-   mapperLocations: classpath:/mapper/*.xml
+   mapperLocations: classpath:/mapper/*.xml,classpath:/mapper/*/*.xml
+   configuration:
+      mapUnderscoreToCamelCase: true
 server:
   port: 8989
 
