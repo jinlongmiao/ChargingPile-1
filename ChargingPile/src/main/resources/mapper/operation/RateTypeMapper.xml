@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.operation.RateTypeMapper">
+    <sql id="choose">
+        <where>
+            <if test="type_code != null and type_code != ''">
+                type_code = #{type_code}
+            </if>
+        </where>
+    </sql>
+
+    <select id="RateTypeList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        *
+        FROM
+        `t_rate_type`
+        <include refid="choose"/>
+        order BY id
+        <choose>
+            <when test="order == 'ASC' ">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        limit #{offSet}, #{pageRow}
+    </select>
+
+
+    <select id="allCount" resultType="Integer" >
+        SELECT  count(0) FROM t_rate_type
+        <include refid="choose"/>
+    </select>
+
+    <update id="changeStatus">
+        UPDATE t_rate_type SET status =
+        <if test=" status == 0 ">
+            1
+        </if>
+        <if test=" status == 1 ">
+            0
+        </if>
+        WHERE id = #{id}
+    </update>
+</mapper>

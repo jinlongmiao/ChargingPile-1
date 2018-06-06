@@ -129,7 +129,7 @@
         // console.log(column);
         this.listQuery.order = column.order === 'descending' ? 'DESC' : 'ASC';
         // console.log(this.listQuery);
-        this.getList();
+        this.handleFilter();
       },
       handleSizeChange(val) {
         //改变每页数量

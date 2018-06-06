@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.socketData.SocketDtlMapper">
+    <sql id="choose">
+        <where>
+            <if test="startTime != null and startTime != ''">
+                create_time BETWEEN #{startTime} and #{endTime}
+            </if>
+            <if test="pileId != '' and pileId !=null">
+                AND pileid = #{pileId}
+            </if>
+            <if test="code != '' and code !=null">
+                AND code = #{code}
+            </if>
+            <if test="gateId != '' and gateId !=null">
+                AND gateid = #{gateId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="list" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        id,
+        gateid AS gateId,
+        pileid AS pileId,
+        direct,
+        code,
+        pack,
+        client_ip AS clientIp,
+        DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTime
+        FROM
+        `t_socket_dtl`
+        <include refid="choose"/>
+        ORDER by id
+        <choose>
+            <when test=" order == 'ASC' ">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        limit #{offSet}, #{pageRow}
+    </select>
+
+
+    <select id="allCount" resultType="Integer">
+        SELECT  count(0) FROM t_socket_dtl
+        <include refid="choose"/>
+    </select>
+
+
+</mapper>

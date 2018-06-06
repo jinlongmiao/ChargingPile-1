@@ -131,8 +131,8 @@ export const asyncRouterMap = [
       {
         path: 'RateType',
         name: '费率标准设置',
-        component: _import('App/Role'),
-        meta: {title: '费率标准设置', icon: 'example'},
+        component: _import('Operation/RateType'),
+        meta: {title: '费率标准设置', icon: 'RateType'},
         menu: 'RateType'
       },
       {
@@ -187,23 +187,23 @@ export const asyncRouterMap = [
     ]
   },
     {
-    path: '/datadict',
+    path: '/SocketData',
     component: Layout,
-    redirect: '/datadict',
+    redirect: '/SocketData/PileTransStep3',
     name: '通讯数据监控',
     meta: {title: '通讯数据监控', icon: 'table'},
     children: [
       {
         path: 'PileTransStep3',
         name: '充电电能数据',
-        component: _import('App/Role'),
-        meta: {title: '充电电能数据', icon: 'example'},
+        component: _import('SocketData/PileTransStep'),
+        meta: {title: '充电电能数据', icon: 'PileTransStep'},
         menu: 'PileTransStep3'
       },
       {
         path: 'SocketDtl',
         name: '网关通讯',
-        component: _import('App/User'),
+        component: _import('SocketData/SocketDtl'),
         meta: {title: '网关通讯', icon: 'example'},
         menu: 'SocketDtl'
       },
