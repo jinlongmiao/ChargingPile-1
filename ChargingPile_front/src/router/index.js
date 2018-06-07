@@ -81,7 +81,7 @@ export const asyncRouterMap = [
         path: 'PileType',
         name: '电桩类型代码',
         component: _import('Datadict/PileType'),
-        meta: {title: '电桩类型代码', icon: 'PileType'},
+        meta: {title: '电桩类型代码', icon: 'pileType'},
         menu: 'BatteryType'
       },
       {
@@ -204,21 +204,21 @@ export const asyncRouterMap = [
         path: 'SocketDtl',
         name: '网关通讯',
         component: _import('SocketData/SocketDtl'),
-        meta: {title: '网关通讯', icon: 'example'},
+        meta: {title: '网关通讯', icon: 'SocketDtl'},
         menu: 'SocketDtl'
       },
       {
         path: 'PileTrans',
         name: '充电交易流水',
-        component: _import('App/Role'),
-        meta: {title: '充电交易流水', icon: 'example'},
+        component: _import('SocketData/PileTrans'),
+        meta: {title: '充电交易流水', icon: 'PileTrans'},
         menu: 'PileTrans'
       },
       {
         path: 'VCProc',
         name: '充电过程数据',
-        component: _import('App/Role'),
-        meta: {title: '充电过程数据', icon: 'example'},
+        component: _import('SocketData/PileChargingProc'),
+        meta: {title: '充电过程数据', icon: 'VCProc'},
         menu: 'VCProc'
       },
     ]

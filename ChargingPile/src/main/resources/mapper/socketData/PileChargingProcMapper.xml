@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.socketData.PileChargingProcMapper">
+    <sql id="choose">
+        <where>
+            <if test="startTime != null and startTime != ''">
+                create_time BETWEEN #{startTime} and #{endTime}
+            </if>
+            <if test="pileId != '' and pileId !=null">
+                AND pileid = #{pileId}
+            </if>
+            <if test="tranId != '' and tranId !=null">
+                AND b0_1 = #{tranId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="list" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        id,
+        DATE_FORMAT(
+        create_time,
+        '%Y-%m-%d %H:%i:%s'
+        ) AS createTime,
+        b0_1 as tranId,
+        gateid as gateId,
+        pileid as pileId,
+        CONV(b4,16,10) as port,
+        CONV(b2_3,16,10) as chargingTime,
+        CONV(b7,16,10) as step,
+        CONV(b5,16,10) as percent,
+        CONV(b16_17,16,10)/10 as outV,
+        CONV(b18_19,16,10)/1000 as outA
+        FROM
+        `t_pile_charging_proc`
+        <include refid="choose"/>
+        ORDER by id
+        <choose>
+            <when test=" order == 'ASC' ">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        limit #{offSet}, #{pageRow}
+    </select>
+
+
+    <select id="allCount" resultType="Integer">
+        SELECT  count(0) FROM t_pile_charging_proc
+        <include refid="choose"/>
+    </select>
+
+
+</mapper>

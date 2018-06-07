@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.socketData.PileTransMapper">
+    <sql id="choose">
+        <where>
+            <if test="startTime != null and startTime != ''">
+                create_time BETWEEN #{startTime} and #{endTime}
+            </if>
+            <if test="pileId != '' and pileId !=null">
+                AND pileid = #{pileId}
+            </if>
+            <if test="chargeCardId != '' and chargeCardId !=null">
+                AND charge_card_id = #{chargeCardId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="list" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        id,
+        DATE_FORMAT(trans_time,'%Y-%m-%d %H:%i:%s') AS transTime,
+        DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTime,
+        gateid AS gateId,
+        pileid AS pileId,
+        trans_id AS transId,
+        step,
+        percent,
+        pre_v AS preV,
+        `port`,
+        charge_card_id AS chargeCardId,
+        ROUND(ac,2) as ac,
+        dc,
+        s1_charge_type AS s1ChargeType,
+        s1_preset AS s1Preset,
+        s1_money AS s1Money,
+        s2_money AS s2Money,
+        s3_money1 AS s3Money1,
+        s3_money2 AS s3Money2
+        FROM
+        `t_pile_trans`
+        <include refid="choose"/>
+        ORDER by id
+        <choose>
+            <when test=" order == 'ASC' ">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        limit #{offSet}, #{pageRow}
+    </select>
+
+
+    <select id="allCount" resultType="Integer">
+        SELECT  count(0) FROM t_pile_trans
+        <include refid="choose"/>
+    </select>
+
+
+</mapper>
