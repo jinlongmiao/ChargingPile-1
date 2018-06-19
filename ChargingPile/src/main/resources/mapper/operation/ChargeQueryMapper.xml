@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.operation.ChargeQueryMapper">
+    <sql id="choose">
+        <where>
+            <if test="startTime != null and startTime != ''">
+                tcq.trans_time BETWEEN #{startTime} and #{endTime}
+            </if>
+            <if test="phone != '' and phone !=null">
+                AND tcq.phone = #{phone}
+            </if>
+        </where>
+    </sql>
+
+    <select id="list" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        tcq.id,
+        DATE_FORMAT(tcq.trans_time,'%Y.%m.%d %T') as transTime,
+        DATE_FORMAT(tcq.trans_time_end,'%Y.%m.%d %T') as transTimeEnd,
+        tcq.phone as phone,
+        tc.`name` as name,
+        tcq.charge_card_id as chargeCardId,
+        tcs.stationname as stationName,
+        tcq.pileid as pileId,
+        tcq.trans_duration as transDuration,
+        tcq.percent as SOC,
+        tcq.s1_money as s1Money,
+        tcq.s2_money as s2Money,
+        tcq.s3_money as s3Money,
+        tcq.offline,
+        tcq.trans_id as transId
+        FROM
+        `t_charge_quert_v1` tcq
+        LEFT JOIN t_customer tc ON tc.charge_card_id = tcq.charge_card_id
+        LEFT JOIN t_chargingstation tcs ON tcs.gateid = tcq.gateid
+        <include refid="choose"/>
+        ORDER by
+        <choose>
+            <when test=" timeOrder != '' and timeOrder != null ">
+                tcq.trans_time ${timeOrder}
+            </when>
+            <when test=" idOrder != '' and idOrder != null ">
+                id ${idOrder}
+            </when>
+            <otherwise>
+               id DESC
+            </otherwise>
+        </choose>
+        limit #{offSet}, #{pageRow}
+    </select>
+
+
+    <select id="allCount" resultType="Integer">
+        SELECT  count(0) FROM t_charge_quert_v1 tcq
+        <include refid="choose"/>
+    </select>
+
+
+</mapper>

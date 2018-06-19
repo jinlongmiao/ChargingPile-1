@@ -37,7 +37,7 @@ const user = {
         api({
           url: "login/auth",
           method: "post",
-          data: loginForm
+          data: loginForm 
         }).then(data => {
           if (data.status) {
             //cookie中保存前端登录状态
@@ -52,12 +52,11 @@ const user = {
     // 获取用户信息
     GetInfo({commit, state}) {
       return new Promise((resolve, reject) => {
-        console.log("store/medules/user.js");
         api({
           url: '/login/getInfo',
           method: 'post'
         }).then(data => {
-          console.log('user.vue/GetInfo');
+          console.log("store/medules/user.js");
           console.log(data);
           //储存用户信息
           commit('SET_USER', data.userPermission);

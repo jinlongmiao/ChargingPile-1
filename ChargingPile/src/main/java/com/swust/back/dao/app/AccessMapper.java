@@ -2,6 +2,7 @@ package com.swust.back.dao.app;
 
 import com.alibaba.fastjson.JSONObject;
 import com.swust.back.model.Access;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ public interface AccessMapper  {
 
     List<Access> selectByNodeId(int nodeId);
 
-    Set<String> getMenus(int roleId);
+    Set<String> getMenus(@Param("roleId")int roleId);
 
     List<Map<String,Object>> getPermissions(int roleId);
 }

@@ -6,6 +6,7 @@ import com.swust.back.model.Access;
 import com.swust.back.model.User;
 import com.swust.back.service.app.AccessService;
 import com.swust.back.util.CommonUtil;
+import com.swust.back.util.CustomUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +67,10 @@ public class AccessServiceImpl implements AccessService {
      */
     public JSONObject getUserPermissionFromDB(User user){
         JSONObject userPermission = new JSONObject();
+        CustomUtils.show(user.getRoleId());
+        // 获得路由信息
         Set<String> menuList = tAccessMapper.getMenus(user.getRoleId());
+        // 获得权限信息
         List<Map<String,Object>> permissions = tAccessMapper.getPermissions(user.getRoleId());
         Set<String> permissionList = changeFromat(permissions);
 

@@ -65,9 +65,9 @@ const permission = {
         if (role === '系统管理员') {
           //如果角色里包含'管理员',那么所有的路由都可以用
           //其实管理员也拥有全部菜单,这里主要是利用角色判断,节省加载时间
-          // accessedRouters = asyncRouterMap
+          accessedRouters = asyncRouterMap
 
-          accessedRouters = filterAsyncRouter(asyncRouterMap, menus)
+          // accessedRouters = filterAsyncRouter(asyncRouterMap, menus)
         } else {
           //否则需要通过以下方法来筛选出本角色可用的路由
           accessedRouters = filterAsyncRouter(asyncRouterMap, menus)

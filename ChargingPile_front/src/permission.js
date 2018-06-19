@@ -11,7 +11,7 @@ router.beforeEach((to, from, next) => {
   // console.log( "getToken() = " + getToken());
 // removeToken();
   if (getToken()) {
-    //如果已经登录 
+    // console.log("如果已经登录"); 
     // console.log(to);
     if (to.path === '/login') {
       next({path: '/'})

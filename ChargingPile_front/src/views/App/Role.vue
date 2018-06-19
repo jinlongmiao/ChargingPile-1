@@ -15,7 +15,12 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="角色" prop="roleName" width="150"></el-table-column>
+      <el-table-column align="center" label="角色"width="150">
+        <template slot-scope="scope">
+          <span v-if="scope.row.roleName === undefined " style="color:#F00"> 自定义权限 </span>
+          <span v-else>{{scope.row.roleName}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="用户" width="150">
         <template slot-scope="scope">
           <div v-for="user in scope.row.users">
@@ -55,9 +60,19 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form class="small-space" :model="tempRole" label-position="left" label-width="100px"
                style='width: 500px; margin-left:50px;'>
-        <el-form-item label="角色名称" required>
+        <el-form-item label="角色名称"  v-if="tempRole.roleName != undefined ">
           <el-input type="text" v-model="tempRole.roleName" style="width: 250px;">
           </el-input>
+        </el-form-item>
+        <el-form-item label="用户">
+          <el-select v-model="tempRole.chooseUser"  multiple  placeholder="请选择">
+            <el-option
+              v-for="item in allUsers"
+              :key="item.userId"
+              :label="item.nickname"
+              :value="item.userId">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="菜单&权限" required v-if="hasPerm('Role:setAction')">
           <div v-for=" (menu,_index) in allPermission" :key="menu.menuName">
@@ -102,13 +117,16 @@
           roleName: '',
           roleId: '',
           permissions: [],
+          chooseUser: []
         },
-        adminName: '系统管理员'
+        adminName: '系统管理员',
+        allUsers: []
       }
     },
     created() {
       this.getList();
       this.getAllPermisson();
+      this.getUserList();
     },
     methods: {
       getAllPermisson() {
@@ -129,13 +147,20 @@
           url: "/Role/listRole",
           method: "get"
         }).then(data => {
-
           console.log("/Role/listRole");
-          console.log(data);
-
-
+          console.log(data); 
           this.listLoading = false;
           this.list = data.list;
+        })
+      },
+      getUserList() {
+         //查询列表
+        this.listLoading = true;
+        this.api({
+          url: "/User/list",
+          method: "get"
+        }).then(data => {
+          this.allUsers = data.list;
         })
       },
       getIndex($index) {
@@ -147,18 +172,27 @@
         this.tempRole.roleName = '';
         this.tempRole.roleId = '';
         this.tempRole.permissions = [];
+        this.tempRole.chooseUser = [];
         this.dialogStatus = "create"
         this.dialogFormVisible = true
       },
       showUpdate($index) {
         let role = this.list[$index];
+        console.log(this.tempRole);
         this.tempRole.roleName = role.roleName;
         this.tempRole.roleId = role.roleId;
         this.tempRole.permissions = [];
+        this.tempRole.chooseUser = [];
+        // this.
         for (let i = 0; i < role.menus.length; i++) {
           let perm = role.menus[i].permissions;
           for (let j = 0; j < perm.length; j++) {
             this.tempRole.permissions.push(perm[j].permissionId);
+          }
+        }
+        for (let i = 0; i < role.users.length; i++){
+          if(role.users[i].nickname != undefined){
+            this.tempRole.chooseUser.push(role.users[i].userId);
           }
         }
         this.dialogStatus = "update"
@@ -190,8 +224,12 @@
         if (!this.checkPermissionNum()) {
           return;
         }
+        // console.log(this.chooseUser);
         console.log("this.tempRole");
         console.log(this.tempRole);
+        if(this.tempRole.roleName === undefined){
+          this .tempRole.roleName = '';
+        }
         //修改角色
         this.api({
           url: "/Role/saveRoleUser",
@@ -213,6 +251,9 @@
       checkRoleNameUnique(roleId) {
         //校验名称重复
         let roleName = this.tempRole.roleName;
+        if( roleName === undefined ){
+          return true;
+        }
         if (!roleName) {
           this.$message.error("请填写角色名称");
           return false;

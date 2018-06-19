@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swust.back.dao.operation.ChargingpileMapper">
-
     <insert id="addChargingpile">
         INSERT INTO t_chargingpile (gateid,pileid,pile_type_code,stationid,state_update_time,reservation_state) VALUES
         (#{gateId},#{pileId},#{pileTypeCode},#{stationId},NOW(),0)
@@ -56,5 +55,46 @@
 
     <select id="getAllPileType" resultType="com.alibaba.fastjson.JSONObject">
         SELECT id, type_code as typeCode,type_name as typeName, wi, port FROM t_pile_type
+    </select>
+
+    <select id="getPileOff" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            cp.id,
+            cp.stationid as stationId,
+            cs.address,
+            cp.gateid as gateId,
+            cp.pilenumber as pileNumber,
+            cp.pileid as pileId,
+            pt.type_name as typeName,
+            DATE_FORMAT(cp.state_update_time,'%Y.%m.%d %T') as stateUpdateTime
+        FROM
+            `t_chargingpile` cp
+        LEFT JOIN t_pile_type pt ON cp.pile_type_code = pt.type_code
+        LEFT JOIN t_chargingstation cs on cs.stationid = cp.stationid
+        <if test="stationId !='' and stationId != null">
+            WHERE cp.stationid = #{stationId}
+        </if>
+        ORDER by cp.id
+        <choose>
+            <when test=" order == 'ASC' ">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        limit #{offSet}, #{pageRow}
+    </select>
+
+    <select id="pileOffCount" resultType="Integer">
+        SELECT
+          count(0)
+        FROM
+          `t_chargingpile` cp
+        LEFT JOIN t_pile_type pt ON cp.pile_type_code = pt.type_code
+        LEFT JOIN t_chargingstation cs on cs.stationid = cp.stationid
+        <if test="stationId !='' and stationId != null">
+            WHERE cp.stationid = #{stationId}
+        </if>
     </select>
 </mapper>

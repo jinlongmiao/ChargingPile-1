@@ -80,4 +80,9 @@ public class ChargingpileController {
     public JSONObject getStationInfo(){
         return chargingpileService.getStationInfo();
     }
+
+    @GetMapping("/getPileOff")
+    public JSONObject getPileOff(HttpServletRequest request) {
+        return chargingpileService.pileOff(CommonUtil.request2Json(request));
+    }
 }

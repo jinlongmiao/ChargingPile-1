@@ -86,6 +86,26 @@ public class CommonUtil {
     /**
      * 查询分页结果后的封装工具方法
      *
+     * @param requestJson 请求参数json,此json在之前调用fillPageParam 方法时,已经将pageRow放入
+     * @param list        查询分页对象list
+     * @param totalCount  查询出记录的总条数
+     */
+    public static JSONObject successPage(final JSONObject requestJson, List<JSONObject> list, int totalCount, float sumMoney) {
+        int pageRow = requestJson.getIntValue("pageRow");
+        int totalPage = getPageCounts(pageRow, totalCount);
+        JSONObject result = successJson();
+        JSONObject returnData = new JSONObject();
+        returnData.put("list", list);
+        returnData.put("totalCount", totalCount);
+        returnData.put("totalPage", totalPage);
+        returnData.put("sumMoney", sumMoney);
+        result.put("returnData", returnData);
+        return result;
+    }
+
+    /**
+     * 查询分页结果后的封装工具方法
+     *
      * @param list 查询分页对象list
      */
     public static JSONObject successPage(List<JSONObject> list) {

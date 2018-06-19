@@ -1,6 +1,8 @@
 package com.swust.back.service.app.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.swust.back.dao.app.UserMapper;
 import com.swust.back.model.User;
 import com.swust.back.service.app.UserService;
@@ -8,6 +10,7 @@ import com.swust.back.util.CommonUtil;
 import com.swust.back.util.CustomUtils;
 import com.swust.back.util.MD5;
 import com.swust.back.util.constants.ErrorEnum;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +44,7 @@ public class UserServiceImpl implements UserService {
         CommonUtil.fillPageParam(jsonObject);
         int count = userMapper.countUser(jsonObject);
         List<JSONObject> list = userMapper.listUser(jsonObject);
+        CustomUtils.show(list);
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
@@ -137,9 +141,12 @@ public class UserServiceImpl implements UserService {
         String roleId = jsonObject.getString("roleId");
         List<Integer> newPerms = (List<Integer>) jsonObject.get("permissions");
         JSONObject roleInfo = userMapper.getRoleAllInfo(jsonObject);
+        CustomUtils.show(roleInfo);
         Set<Integer> oldPerms = (Set<Integer>) roleInfo.get("permissionIds");
         //修改角色名称
         dealRoleName(jsonObject, roleInfo);
+        //修改用户
+        dealUsers(jsonObject);
         //添加新权限
         saveNewPermission(roleId, newPerms, oldPerms);
         //移除旧的不再拥有的权限
@@ -153,10 +160,53 @@ public class UserServiceImpl implements UserService {
      */
     private void dealRoleName(JSONObject paramJson, JSONObject roleInfo) {
         String roleName = paramJson.getString("roleName");
+        if(roleName.equals("")){
+            return;
+        }
         if (!roleName.equals(roleInfo.getString("roleName"))) {
-            userMapper.updateRoleName(paramJson);
+//            if(userMapper.queryExistRole(paramJson) <= 0){
+//                userMapper.addRoleUser(paramJson);
+//            }
+//            else{
+                userMapper.updateRoleName(paramJson);
+//            }
         }
     }
+    private void dealUsers(JSONObject jsonObject){
+        //在t_user_role增加即可
+        String roleId = jsonObject.getString("roleId");
+        List<Integer> newUsers = (List<Integer>)jsonObject.get("chooseUser");
+        List<Integer> oldUsers = userMapper.getUsers(jsonObject);
+        CustomUtils.show(oldUsers);
+        saveNewUser(roleId,newUsers,oldUsers);
+        removeOldUser(roleId,newUsers,oldUsers);
+    }
+
+
+    private void saveNewUser(String roleId, Collection<Integer> newPerms, Collection<Integer> oldPerms){
+        List<Integer> waitInsert = new ArrayList<>();
+        for (Integer newPerm : newPerms) {
+            if (!oldPerms.contains(newPerm)) {
+                waitInsert.add(newPerm);
+            }
+        }
+        if (waitInsert.size() > 0) {
+            userMapper.insertRoleUser(roleId, waitInsert);
+        }
+    }
+    private void removeOldUser(String roleId, Collection<Integer> newPerms, Collection<Integer> oldPerms) {
+        List<Integer> waitRemove = new ArrayList<>();
+        for (Integer oldPerm : oldPerms) {
+            if (!newPerms.contains(oldPerm)) {
+                waitRemove.add(oldPerm);
+            }
+        }
+        if (waitRemove.size() > 0) {
+            userMapper.removeRoleUser(roleId, waitRemove);
+        }
+
+    }
+
 
     /**
      * 为角色添加新权限

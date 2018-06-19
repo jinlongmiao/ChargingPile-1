@@ -2,6 +2,8 @@ package com.swust.back.service.operation;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.List;
+
 public interface ChargingpileService {
     JSONObject addChargingPile(JSONObject requestJson);
 
@@ -14,4 +16,6 @@ public interface ChargingpileService {
     JSONObject getAllPileType();
 
     JSONObject getStationInfo();
+
+    JSONObject pileOff(JSONObject jsonObject);
 }

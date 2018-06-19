@@ -87,8 +87,8 @@ export const asyncRouterMap = [
       {
         path: 'Area',
         name: '区域代码',
-        component: _import('App/Role'),
-        meta: {title: '区域代码', icon: 'example'},
+        component: _import('Datadict/Area'),
+        meta: {title: '区域代码', icon: 'Area'},
         menu: 'BatteryType'
       },
     ]
@@ -110,15 +110,15 @@ export const asyncRouterMap = [
       {
         path: 'ChargeQuery',
         name: '充电查询',
-        component: _import('App/User'),
-        meta: {title: '充电查询', icon: 'example'},
+        component: _import('Operation/ChargeQuery'),
+        meta: {title: '充电查询', icon: 'ChargeQuery'},
         menu: 'ChargeQuery'
       },
-      {
+      {  
         path: 'PileOff',
         name: '故障设备',
-        component: _import('App/Role'),
-        meta: {title: '故障设备', icon: 'example'},
+        component: _import('Operation/PileOff'),
+        meta: {title: '故障设备', icon: 'PileOff'},
         menu: 'PileOff'
       },
       {
@@ -173,8 +173,8 @@ export const asyncRouterMap = [
       {
         path: 'Customer',
         name: '充电卡管理',
-        component: _import('App/Role'),
-        meta: {title: '充电卡管理', icon: 'example'},
+        component: _import('Operation/Customer'),
+        meta: {title: '充电卡管理', icon: 'Customer'},
         menu: 'Customer'
       },
       {

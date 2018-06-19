@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.operation.CustomerMapper">
+
+    <sql id="choose">
+        <where>
+            <if test="startTime != null and startTime != ''">
+                tc.create_time BETWEEN #{startTime} and #{endTime}
+            </if>
+            <if test="phone != '' and phone !=null">
+                AND tc.phone = #{phone}
+            </if>
+            <if test="chargeCardId != '' and chargeCardId !=null">
+                AND tc.charge_card_id = #{chargeCardId}
+            </if>
+        </where>
+    </sql>
+
+
+    <insert id="add">
+        INSERT INTO t_customer (id_card,NAME,phone,charge_card_id,mem,charge_card_money,
+        stationid,create_user)
+        VALUES
+        ('',#{name},#{phone},#{chargeCardId},#{mem},0,'S419001-0001',
+		(SELECT account FROM t_user WHERE id = #{userId})
+	)
+    </insert>
+
+    <delete id="deleteCustomerById">
+        DELETE FROM t_customer where id = #{id}
+    </delete>
+
+    <update id="updateCustomerById">
+        UPDATE t_customer SET
+        name=#{name},phone=#{phone},charge_card_id=#{chargeCardId},mem = #{mem}
+        WHERE id = #{id}
+    </update>
+
+    <update id="lockCustomer">
+        UPDATE t_customer SET
+        status = -1
+        WHERE id = #{id}
+    </update>
+
+    <update id="chargeNum">
+        UPDATE t_customer SET
+        charge_card_money = charge_card_money + #{num}
+        WHERE id = #{id}
+    </update>
+    <select id="CustomerList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            tc.id,
+            tc.charge_card_id AS chargeCardId,
+            tcs.state_name AS stateName,
+            tc.name,
+            tc.phone,
+            tc.charge_card_money AS chargeCardMoney,
+            DATE_FORMAT(tc.state_update_time,'%Y.%m.%d %T') AS stateUpdateTime,
+            DATE_FORMAT(tc.create_time,'%Y.%m.%d %T') AS createTime,
+            tc.create_user AS createUser,
+            tc.status,
+            tc.mem
+        FROM
+            `t_customer` tc
+        LEFT JOIN t_card_state tcs ON tcs.state_code = tc.charge_card_state
+        <include refid="choose"/>
+        ORDER by id
+        <choose>
+            <when test=" order == 'ASC' ">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        limit #{offSet}, #{pageRow}
+    </select>
+
+    <select id="allCount" resultType="Integer">
+        SELECT  count(0) FROM `t_customer` tc
+        <include refid="choose"/>
+    </select>
+
+    <select id="getSumMoneyByCondition" resultType="FLOAT">
+        SELECT IFNULL(sum(charge_card_money),0) FROM `t_customer` tc
+        <include refid="choose"/>
+    </select>
+
+    <select id="allDepositCount" resultType="Integer">
+        SELECT  count(0) FROM `t_card_deposit` tc
+        <include refid="choose"/>
+    </select>
+
+    <select id="depositList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        tc.id,
+        tc.charge_card_id AS chargeCardId,
+        b.name,
+        b.phone,
+        tc.money,
+        c.stationname,
+        tc.create_user as createUser,
+        DATE_FORMAT(tc.create_time,'%Y.%m.%d %T') as createTime,
+        tc.mem
+        FROM
+        `t_card_deposit` tc
+        LEFT JOIN t_customer b on tc.customer_id = b.id
+        LEFT JOIN t_chargingstation c on tc.stationid = c.stationid
+        <include refid="choose"/>
+        ORDER by id
+        <choose>
+            <when test=" order == 'ASC' ">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        limit #{offSet}, #{pageRow}
+    </select>
+</mapper>

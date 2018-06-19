@@ -64,9 +64,9 @@
           if (valid) {
             this.loading = true
             this.$store.dispatch('Login', this.loginForm).then(data => {
-              console.log("login/index.vue");
-              console.log(data);
-              this.loading = false
+              // console.log("login/index.vue");
+              // console.log(data);
+              this.loading = false;
               if (data.status) { 
                 console.log("data");
                 this.$router.push({path: '/'});

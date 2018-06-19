@@ -31,6 +31,9 @@ public interface UserMapper {
      */
     int queryExistUserIdInRoleUser(JSONObject jsonObject);
 
+    int queryExistRole(JSONObject jsonObject);
+
+    int queryExistRoleUser(JSONObject jsonObject);
     /**
      * 新增用户
      * @param jsonObject
@@ -146,4 +149,10 @@ public interface UserMapper {
     void deleteByIdInUser(JSONObject jsonObject);
 
     void deleteByIdInRoleUser(JSONObject jsonObject);
+
+    List<Integer> getUsers(JSONObject jsonObject);
+
+    void insertRoleUser(@Param("roleId") String roleId, @Param("users") List<Integer> waitInsert);
+
+    void removeRoleUser(@Param("roleId") String roleId, @Param("users") List<Integer> waitRemove);
 }

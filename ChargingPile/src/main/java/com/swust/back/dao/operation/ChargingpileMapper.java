@@ -18,4 +18,8 @@ public interface ChargingpileMapper {
     List<JSONObject> getAllPileType();
 
     List<JSONObject> getStationInfo();
+
+    List<JSONObject> getPileOff(JSONObject jsonObject);
+
+    int pileOffCount(JSONObject jsonObject);
 }

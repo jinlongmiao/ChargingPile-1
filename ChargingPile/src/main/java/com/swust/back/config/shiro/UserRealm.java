@@ -54,12 +54,11 @@ public class UserRealm extends AuthorizingRealm {
         // 实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
         User user = userService.selectUserByAccount(username);
 
-        logger.info("Select username=====>" + user.getAccount()  + "Select password=====>" + user.getPassword());
         //没找到帐号
         if (user == null) {
             throw new UnknownAccountException();
         }
-
+        logger.info("Select username=====>" + user.getAccount()  + "Select password=====>" + user.getPassword());
         //账号锁定
         if ( !user.getStatus() ){
             throw new LockedAccountException();

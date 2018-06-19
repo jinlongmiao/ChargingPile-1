@@ -55,7 +55,6 @@ public class ChargingpileServiceImpl implements ChargingpileService{
      */
     @Override
     public JSONObject getAllPileType() {
-//        CustomUtils.show(chargingpileMapper.getAllPileType());
         List<JSONObject> iList = chargingpileMapper.getAllPileType();
         // 存放数据
         List<JSONObject> jList = new ArrayList<>();
@@ -68,7 +67,6 @@ public class ChargingpileServiceImpl implements ChargingpileService{
             chargingPileInfo.put("label",msg);
             jList.add(chargingPileInfo);
         }
-//        CustomUtils.show(jList);
         return CommonUtil.successPage(jList);
     }
 
@@ -81,4 +79,18 @@ public class ChargingpileServiceImpl implements ChargingpileService{
         List<JSONObject> iList = chargingpileMapper.getStationInfo();
         return CommonUtil.successPage(iList);
     }
+
+    /**
+     * 故障设备
+     */
+    @Override
+    public JSONObject pileOff(JSONObject jsonObject) {
+        CommonUtil.fillPageParam(jsonObject);
+        int count = chargingpileMapper.pileOffCount(jsonObject);
+        List<JSONObject> list = chargingpileMapper.getPileOff(jsonObject);
+        return CommonUtil.successPage(jsonObject, list, count);
+    }
+
+
+
 }

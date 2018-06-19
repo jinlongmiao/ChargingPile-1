@@ -12,24 +12,44 @@
     <result column="module" jdbcType="VARCHAR" property="module" />
   </resultMap>
 
-    <select id="selectRolePermissionsArray" resultType="map">
-        SELECT
-        access. node_id as id,
-        node. name as route,
-        node.title as name,
-        gp.id as parent_id,
-        gp.name as groupRoute,
-        gp.title as groupName
-        FROM
-        t_access access,
-        t_node node,
-        t_group gp
-        WHERE
-        access.role_id = #{roleId}
-        AND node.status = 1
-        AND access.level = 2
-        AND access.node_id = node.id
-        AND gp.id = node.group_id;
+    <select id="selectRolePermissionsArray" resultType="map" parameterType="Integer">
+        <choose>
+            <when test=" roleId != 1 ">
+                SELECT
+                access. node_id as id,
+                node. name as route,
+                node.title as name,
+                gp.id as parent_id,
+                gp.name as groupRoute,
+                gp.title as groupName
+                FROM
+                t_access access,
+                t_node node,
+                t_group gp
+                WHERE
+                access.role_id = #{roleId}
+                AND node.status = 1
+                AND access.level = 2
+                AND access.node_id = node.id
+                AND gp.id = node.group_id;
+            </when>
+            <otherwise>
+                SELECT
+                node. name as route,
+                node.title as name,
+                gp.id as parent_id,
+                gp.name as groupRoute,
+                gp.title as groupName
+                FROM
+                t_node node,
+                t_group gp
+                WHERE
+                node.status = 1
+                AND node.level = 2
+                AND gp.id = node.group_id;
+            </otherwise>
+        </choose>
+
     </select>
 
     <select id="selectByNodeId" resultMap="BaseResultMap">
@@ -40,16 +60,29 @@
         node_id = #{nodeId};
     </select>
 
-    <select id="getMenus" resultType="String">
-        SELECT
-        node.name
-        FROM
-        t_access access,
-        t_node node
-        WHERE
-        access.role_id = #{roleId}
-        AND access.node_id = node.id
-		AND access.`level` = 2;
+    <select id="getMenus" resultType="String" parameterType="Integer">
+        <choose>
+            <when test=" roleId != 1 ">
+                SELECT
+                node.name
+                FROM
+                t_access access,
+                t_node node
+                WHERE
+                access.role_id = #{roleId}
+                AND access.node_id = node.id
+                AND access.`level` = 2;
+            </when>
+            <otherwise>
+                SELECT
+                node.name
+                FROM
+                t_node node
+                WHERE
+                `level` = 2 AND
+                `status` = 1;
+            </otherwise>
+        </choose>
     </select>
 
     <select id="getPermissions" resultType="map">

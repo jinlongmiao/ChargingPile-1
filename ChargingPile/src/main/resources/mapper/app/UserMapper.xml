@@ -77,28 +77,32 @@
         user_id = #{userId}
     </update>
 
-    <resultMap id="userMap" type="com.swust.back.util.model.One2Many">
-        <id column="userId" property="userId"/>
-        <result column="username" property="username"/>
-        <result column="nickname" property="nickname"/>
-        <result column="roleId" property="roleId"/>
-        <result column="roleName" property="roleName"/>
-        <result column="createTime" property="createTime"/>
-        <result column="updateTime" property="updateTime"/>
-    </resultMap>
-    <select id="listUser" resultMap="userMap">
+    <!--<resultMap id="userMap" type="com.swust.back.util.model.One2Many">-->
+        <!--<id column="userId" property="userId"/>-->
+        <!--<result column="username" property="username"/>-->
+        <!--<result column="nickname" property="nickname"/>-->
+        <!--<result column="roleId" property="roleId"/>-->
+        <!--<result column="roleName" property="roleName"/>-->
+        <!--<result column="createTime" property="createTime"/>-->
+        <!--<result column="updateTime" property="updateTime"/>-->
+    <!--</resultMap>-->
+    <!--<select id="listUser" resultMap="userMap">-->
+    <select id="listUser" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             t.id as userId,
             t.account as username,
             DATE_FORMAT(from_unixtime(t.create_time),'%Y.%m.%d %T') as createTime,
             DATE_FORMAT(from_unixtime(t.update_time),'%Y.%m.%d %T') as updateTime,
             t.nickname as nickname,
-            ru.role_id as roleId,
-            r.name as roleName
+            GROUP_CONCAT(ru.role_id) as roleId,
+--             ru.role_id as roleId,
+            GROUP_CONCAT(r.name) as roleName
         FROM
             `t_user` t
         LEFT JOIN t_role_user ru ON t.id = ru.user_id
-        LEFT JOIN t_role r ON ru.role_id = r.id;
+        LEFT JOIN t_role r ON ru.role_id = r.id
+        GROUP BY  t.id
+        ORDER BY roleId
     </select>
 
     <select id="getAllRoles" resultType="com.alibaba.fastjson.JSONObject">
@@ -119,6 +123,22 @@
         select count(0)
         from t_role_user
         WHERE user_id=#{userId};
+    </select>
+
+    <select id="queryExistRole" resultType="int">
+        select count(0)
+        from t_role_user
+        WHERE role_id=#{roleId};
+    </select>
+
+    <select id="queryExistRoleUser" resultType="int">
+        select count(0)
+        from t_role_user
+        WHERE role_id=#{roleId} and user_id=#{userId};
+    </select>
+
+    <select id="getUsers" resultType="int">
+        SELECT user_id FROM t_role_user where role_id = #{roleId}
     </select>
 
   <select id="selectUserByAccount" resultType="com.swust.back.model.User">
@@ -211,14 +231,14 @@
     </resultMap>
     <select id="getRoleAllInfo" resultMap="aRole">
         SELECT
-            r.id AS roleId,
-            r.name AS roleName,
+            a.role_id AS roleId,
+            r. NAME AS roleName,
             ru.user_id AS userId,
             a.node_id AS permissionId
         FROM
-            t_role r
-        LEFT JOIN t_role_user ru ON r.id = ru.role_id
-        LEFT JOIN t_access a ON a.role_id = r.id
+            t_access a
+        LEFT JOIN t_role_user ru ON a.role_id = ru.role_id
+        LEFT JOIN t_role r ON a.role_id = r.id
         WHERE
             a.`level` = 3
         AND a.role_id = #{roleId}
@@ -247,6 +267,13 @@
 
     </insert>
 
+    <insert id="insertRoleUser">
+        INSERT INTO t_role_user (role_id, user_id)
+        VALUES
+        <foreach collection="users" item="item" index="index" separator=",">
+            (#{roleId}, #{item})
+        </foreach>
+    </insert>
     <delete id="removeOldPermission">
       DELETE
       FROM
@@ -258,7 +285,17 @@
           #{item}
       </foreach>
     </delete>
-
+    <delete id="removeRoleUser">
+        DELETE
+        FROM
+        t_role_user
+        WHERE
+        role_id = #{roleId}
+        AND user_id IN
+        <foreach collection="users" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
     <delete id="deleteByIdInUser">
         DELETE FROM t_user WHERE id = #{userId}
     </delete>

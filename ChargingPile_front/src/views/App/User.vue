@@ -16,11 +16,12 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="昵称" prop="nickname" width="180"></el-table-column>
-      <el-table-column align="center" label="用户名" prop="username" width="180"></el-table-column>
+      <el-table-column align="center" label="用户名(登陆账号)" prop="username" width="180"></el-table-column>
       <el-table-column align="center" label="角色" >
         <template slot-scope="scope">
-          <el-tag type="success" v-text="scope.row.roleName" v-if="scope.row.roleId===1"></el-tag>
+          <el-tag type="success" v-text="scope.row.roleName" v-if="scope.row.nickname==='系统管理员'"></el-tag>
           <el-tag type="primary" v-text="scope.row.roleName" v-else></el-tag>
+          <el-tag type="primary" v-if=" 'scope.row.roleId.indexOf(',') > 0' ">自定义权限</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="创建时间" prop="createTime" width="170"></el-table-column>
@@ -28,7 +29,7 @@
       <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-          <el-button type="danger" icon="delete" v-if="scope.row.userId!=userId && hasPerm('Role:delRoleUser')"
+          <el-button type="danger" icon="delete" v-if="scope.row.userId!=1 && hasPerm('Role:delRoleUser')"
                      @click="removeUser(scope.$index)">删除
           </el-button>
         </template>
@@ -46,7 +47,7 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form class="small-space" :model="tempUser" label-position="left" label-width="80px"
                style='width: 300px; margin-left:50px;'>
-        <el-form-item label="用户名" required v-if="dialogStatus=='create'">
+        <el-form-item label="登陆账号" required v-if="dialogStatus=='create'">
           <el-input type="text" v-model="tempUser.username">
           </el-input>
         </el-form-item>
@@ -58,7 +59,7 @@
           <el-input type="password" v-model="tempUser.password" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
-        <el-form-item label="角色" required v-if="tempUser.userId != 1">
+       <!--  <el-form-item label="角色" required v-if="tempUser.userId != 1">
           <el-select v-model="tempUser.roleId" placeholder="请选择">
             <el-option
               v-for="item in roles"
@@ -68,7 +69,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="昵称" required>
+ -->        <el-form-item label="昵称" required>
           <el-input type="text" v-model="tempUser.nickname">
           </el-input>
         </el-form-item>
@@ -138,7 +139,13 @@
           method: "get",
           params: this.listQuery
         }).then(data => {
+          console.log(data.list);
           this.listLoading = false;
+          for(let i = 0; i < data.list.length;i++){
+            if( data.list[i].roleName === undefined ){
+              data.list[i].roleName = "自定义权限";
+            }
+          }
           this.list = data.list;
           this.totalCount = data.totalCount;
         })
@@ -174,6 +181,7 @@
       },
       showUpdate($index) {
         let user = this.list[$index];
+        console.log(user);
         this.tempUser = user;
         this.tempUser.password = '';
         this.dialogStatus = "update"
