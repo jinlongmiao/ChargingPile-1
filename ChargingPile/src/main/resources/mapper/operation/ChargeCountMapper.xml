@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.operation.ChargeCountMapper">
+    <sql id="choose">
+        <where>
+            tcq.trans_time_end IS NOT NULL
+            <if test="startTime != null and startTime != ''">
+                and tcq.trans_time BETWEEN #{startTime} and #{endTime}
+            </if>
+            <if test="stationId !='' and stationId != null">
+                 and tcs.stationid = #{stationId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="list" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            tcs.stationname as stationName,
+            tcq.pileid as pileId,
+            count(1) AS transNumbers,
+            SUM(tcq.trans_duration) AS transDuration,
+            SUM(tcq.ac_wast) acWast,
+            SUM(tcq.dc_wast) dcWast,
+            SUM(tcq.ac_wast) + SUM(tcq.dc_wast) AS wast,
+            SUM(tcq.s2_money) money
+        FROM
+        `t_charge_query` tcq
+	    LEFT JOIN t_chargingstation tcs on tcs.gateid = tcq.gateid
+        <include refid="choose"/>
+        GROUP BY
+        tcq.pileid
+        ORDER BY pileid ASC
+    </select>
+
+    <select id="allCount" resultType="Integer">
+        select count(*) from (
+            SELECT
+            count(0)
+            FROM
+            `t_charge_query` tcq
+            LEFT JOIN t_chargingstation tcs on tcs.gateid = tcq.gateid
+            <include refid="choose"/>
+            GROUP BY
+            tcq.pileid
+        ) a
+    </select>
+</mapper>

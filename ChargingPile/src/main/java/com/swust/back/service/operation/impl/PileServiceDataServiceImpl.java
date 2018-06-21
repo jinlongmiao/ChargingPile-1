@@ -1,6 +1,7 @@
 package com.swust.back.service.operation.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.swust.back.dao.datadict.PileMapper;
 import com.swust.back.dao.operation.PileDataMapper;
 import com.swust.back.service.operation.PileServiceDataService;
 import com.swust.back.util.CommonUtil;
@@ -17,6 +18,8 @@ public class PileServiceDataServiceImpl implements PileServiceDataService {
     @Resource
     private PileDataMapper pileDataMapper;
 
+    @Resource
+    private PileMapper pileMapper;
 
     @Override
     public JSONObject list(JSONObject jsonObject) {
@@ -25,5 +28,14 @@ public class PileServiceDataServiceImpl implements PileServiceDataService {
         int count = pileDataMapper.pileDataCount();
         List<JSONObject> list = pileDataMapper.pileDataList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
+    }
+
+    @Override
+    public JSONObject getPiles(JSONObject jsonObject) {
+        List<JSONObject> piles = pileMapper.getPiles();
+        CustomUtils.show(piles);
+        JSONObject returnData = new JSONObject();
+        returnData.put("list", piles);
+        return CommonUtil.successJson(returnData);
     }
 }

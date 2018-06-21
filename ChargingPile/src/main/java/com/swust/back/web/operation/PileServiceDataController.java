@@ -20,4 +20,10 @@ public class PileServiceDataController {
     public JSONObject listPileServiceData(HttpServletRequest request) {
         return pileServiceDataService.list(CommonUtil.request2Json(request));
     }
+
+
+    @GetMapping("/getPiles")
+    public JSONObject getPiles(HttpServletRequest request) {
+        return pileServiceDataService.getPiles(CommonUtil.request2Json(request));
+    }
 }

@@ -56,4 +56,6 @@ public interface PileMapper {
     int stateCount();
 
     List<JSONObject> stateList(JSONObject jsonObject);
+
+    List<JSONObject> getPiles();
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.back.dao.operation.VChargingProcMapper">
+    <sql id="choose">
+        <where>
+            <if test="pileId != '' and pileId !=null">
+                 pileid = #{pileId}
+            </if>
+            <if test="chargeCardId != '' and chargeCardId !=null">
+                AND charge_card_id = #{chargeCardId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="list" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        DATE_FORMAT(max(create_time),'%Y.%m.%d %T') as createTime,
+        DATE_FORMAT(trans_time,'%Y.%m.%d %T') as transTime,
+        phone,
+        charge_card_id as chargeCardId,
+        gateid as gateId,
+        pileid as pileId,
+        PORT,
+        trans_id as transId,
+        max(trans_minutes) as transMinutes,
+        max(charge_kWh) as chargeKWh,
+        max(out_v) outV,
+        max(out_i) outI,
+        max(SOC) SOC
+        FROM
+        t_v_charging_proc
+        <include refid="choose"/>
+        GROUP BY
+        charge_card_id
+        limit #{offSet}, #{pageRow}
+    </select>
+
+
+    <select id="allCount" resultType="Integer">
+        SELECT
+        count(0)
+        from
+        (SELECT * FROM t_v_charging_proc <include refid="choose"/>) a
+    </select>
+
+
+</mapper>

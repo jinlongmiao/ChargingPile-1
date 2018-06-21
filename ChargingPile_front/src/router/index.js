@@ -122,11 +122,11 @@ export const asyncRouterMap = [
         menu: 'PileOff'
       },
       {
-        path: 'chargeCount',
+        path: 'ChargeCount',
         name: '充电统计',
-        component: _import('App/Role'),
-        meta: {title: '充电统计', icon: 'example'},
-        menu: 'chargeCount'
+        component: _import('Operation/ChargeCount'),
+        meta: {title: '充电统计', icon: 'ChargeCount'},
+        menu: 'ChargeCount'
       },
       {
         path: 'RateType',
@@ -138,8 +138,8 @@ export const asyncRouterMap = [
       {
         path: 'VChargingProc',
         name: '实时充电数据监测',
-        component: _import('App/Role'),
-        meta: {title: '实时充电数据监测', icon: 'example'},
+        component: _import('Operation/VChargingProc'),
+        meta: {title: '实时充电数据监测', icon: 'VChargingProc'},
         menu: 'VChargingProc'
       },
       {

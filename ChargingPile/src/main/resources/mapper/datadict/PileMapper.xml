@@ -72,4 +72,32 @@
     <select id="stateCount" resultType="Integer">
         SELECT  count(0) FROM t_pile_state
     </select>
+
+    <resultMap id="pilesMap" type="com.swust.back.util.model.One2Many">
+        <id column="stationid" property="stationId"/>
+        <result column="stationname" property="stationName"/>
+        <result column="state_update_time" property="stateUpdateTime"/>
+        <collection property="piles" ofType="com.alibaba.fastjson.JSONObject">
+            <id column="pileid" property="pileId"/>
+            <result column="pile_type_code" property="pileTypeCode"/>
+            <result column="pile_state_code" property="pileStateCode"/>
+            <result column="type_name" property="typeName"/>
+        </collection>
+    </resultMap>
+
+    <select id="getPiles" resultMap="pilesMap">
+        SELECT
+            tcs.stationname,
+            tcs.stationid,
+            tcp.pileid,
+            tcp.pile_type_code,
+            tcp.pile_state_code,
+            tpt.type_name,
+            tcp.state_update_time
+        FROM
+            `t_chargingpile` tcp
+        LEFT JOIN t_chargingstation tcs on tcs.gateid = tcp.gateid
+        LEFT JOIN t_pile_type tpt ON tpt.type_code = tcp.pile_type_code
+        where  tcs.stationid != '';
+    </select>
 </mapper>

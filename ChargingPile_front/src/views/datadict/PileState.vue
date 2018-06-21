@@ -81,7 +81,8 @@
       }
     },
     created() {
-      this.getList();
+      // this.getList();
+      this.getPiles();
     },
     computed: {
       ...mapGetters([
@@ -89,6 +90,23 @@
       ])
     },
     methods: {
+      getPiles() {
+        //查询列表
+        this.listLoading = false;
+        this.api({
+          url: "/PileServiceData/list",
+          method: "get",
+          params: this.listQuery
+        }).then(data => {
+          console.log(this.data);
+          this.listLoading = false;
+          this.list = data.list;
+          this.totalCount = data.totalCount;
+        })
+      },
+
+
+
       getList() {
         //查询列表
         this.listLoading = true;
