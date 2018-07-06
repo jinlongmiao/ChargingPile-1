@@ -82,6 +82,7 @@
             <result column="pile_type_code" property="pileTypeCode"/>
             <result column="pile_state_code" property="pileStateCode"/>
             <result column="type_name" property="typeName"/>
+            <result column="type" property="type"/>
         </collection>
     </resultMap>
 
@@ -93,7 +94,8 @@
             tcp.pile_type_code,
             tcp.pile_state_code,
             tpt.type_name,
-            tcp.state_update_time
+            unix_timestamp(tcp.state_update_time) as state_update_time,
+			tpt.type
         FROM
             `t_chargingpile` tcp
         LEFT JOIN t_chargingstation tcs on tcs.gateid = tcp.gateid

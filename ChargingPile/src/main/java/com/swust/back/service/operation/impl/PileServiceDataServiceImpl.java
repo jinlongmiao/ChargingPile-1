@@ -18,8 +18,7 @@ public class PileServiceDataServiceImpl implements PileServiceDataService {
     @Resource
     private PileDataMapper pileDataMapper;
 
-    @Resource
-    private PileMapper pileMapper;
+
 
     @Override
     public JSONObject list(JSONObject jsonObject) {
@@ -30,12 +29,5 @@ public class PileServiceDataServiceImpl implements PileServiceDataService {
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
-    @Override
-    public JSONObject getPiles(JSONObject jsonObject) {
-        List<JSONObject> piles = pileMapper.getPiles();
-        CustomUtils.show(piles);
-        JSONObject returnData = new JSONObject();
-        returnData.put("list", piles);
-        return CommonUtil.successJson(returnData);
-    }
+
 }

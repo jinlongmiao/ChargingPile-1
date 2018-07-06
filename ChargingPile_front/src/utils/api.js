@@ -21,7 +21,7 @@ service.interceptors.response.use(
     
 
     // console.log("respone拦截器");
-    // console.log(response)
+    // console.log(response.data)
     const res = response.data;
 
 
@@ -29,6 +29,8 @@ service.interceptors.response.use(
       return res;
     }
     if (res.returnCode == '100') {
+      // console.log("2");
+      // console.log(res.returnData);
       return res.returnData;
     } else if (res.returnCode == "20011") {
       Message({
