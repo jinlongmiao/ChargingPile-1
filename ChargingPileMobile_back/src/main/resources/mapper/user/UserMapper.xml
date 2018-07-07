@@ -1,38 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.swust.chargingmobileback.dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.swust.chargingmobileback.model.User" >
-    <id column="id" property="id" jdbcType="SMALLINT" />
-    <result column="account" property="account" jdbcType="VARCHAR" />
-    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
-    <result column="password" property="password" jdbcType="CHAR" />
-    <result column="bind_account" property="bindAccount" jdbcType="VARCHAR" />
-    <result column="dwdm" property="dwdm" jdbcType="VARCHAR" />
-    <result column="last_login_time" property="lastLoginTime" jdbcType="INTEGER" />
-    <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
-    <result column="login_count" property="loginCount" jdbcType="INTEGER" />
-    <result column="verify" property="verify" jdbcType="VARCHAR" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="INTEGER" />
-    <result column="update_time" property="updateTime" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="BIT" />
-    <result column="type" property="type" jdbcType="TINYINT" />
-    <result column="photo" property="photo" jdbcType="VARCHAR" />
-    <result column="max_number" property="maxNumber" jdbcType="TINYINT" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.chargingmobileback.dao.user.UserMapper">
+  <resultMap id="BaseResultMap" type="com.swust.chargingmobileback.model.User">
+    <id column="id" jdbcType="SMALLINT" property="id" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="password" jdbcType="CHAR" property="password" />
+    <result column="bind_account" jdbcType="VARCHAR" property="bindAccount" />
+    <result column="dwdm" jdbcType="VARCHAR" property="dwdm" />
+    <result column="last_login_time" jdbcType="INTEGER" property="lastLoginTime" />
+    <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
+    <result column="login_count" jdbcType="INTEGER" property="loginCount" />
+    <result column="verify" jdbcType="VARCHAR" property="verify" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="INTEGER" property="createTime" />
+    <result column="update_time" jdbcType="INTEGER" property="updateTime" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="max_number" jdbcType="TINYINT" property="maxNumber" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.swust.chargingmobileback.model.User" extends="BaseResultMap" >
-    <result column="info" property="info" jdbcType="LONGVARCHAR" />
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.swust.chargingmobileback.model.User">
+    <result column="info" jdbcType="LONGVARCHAR" property="info" />
   </resultMap>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     id, account, nickname, password, bind_account, dwdm, last_login_time, last_login_ip, 
     login_count, verify, email, remark, create_time, update_time, status, type, photo, 
     max_number
   </sql>
-  <sql id="Blob_Column_List" >
+  <sql id="Blob_Column_List">
     info
   </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Short" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
     ,
@@ -40,11 +40,11 @@
     from t_user
     where id = #{id,jdbcType=SMALLINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
     delete from t_user
     where id = #{id,jdbcType=SMALLINT}
   </delete>
-  <insert id="insert" parameterType="com.swust.chargingmobileback.model.User" >
+  <insert id="insert" parameterType="com.swust.chargingmobileback.model.User">
     insert into t_user (id, account, nickname, 
       password, bind_account, dwdm, 
       last_login_time, last_login_ip, login_count, 
@@ -60,188 +60,188 @@
       #{type,jdbcType=TINYINT}, #{photo,jdbcType=VARCHAR}, #{maxNumber,jdbcType=TINYINT}, 
       #{info,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.swust.chargingmobileback.model.User" >
+  <insert id="insertSelective" parameterType="com.swust.chargingmobileback.model.User">
     insert into t_user
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="account != null" >
+      <if test="account != null">
         account,
       </if>
-      <if test="nickname != null" >
+      <if test="nickname != null">
         nickname,
       </if>
-      <if test="password != null" >
+      <if test="password != null">
         password,
       </if>
-      <if test="bindAccount != null" >
+      <if test="bindAccount != null">
         bind_account,
       </if>
-      <if test="dwdm != null" >
+      <if test="dwdm != null">
         dwdm,
       </if>
-      <if test="lastLoginTime != null" >
+      <if test="lastLoginTime != null">
         last_login_time,
       </if>
-      <if test="lastLoginIp != null" >
+      <if test="lastLoginIp != null">
         last_login_ip,
       </if>
-      <if test="loginCount != null" >
+      <if test="loginCount != null">
         login_count,
       </if>
-      <if test="verify != null" >
+      <if test="verify != null">
         verify,
       </if>
-      <if test="email != null" >
+      <if test="email != null">
         email,
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         remark,
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time,
       </if>
-      <if test="updateTime != null" >
+      <if test="updateTime != null">
         update_time,
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         status,
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type,
       </if>
-      <if test="photo != null" >
+      <if test="photo != null">
         photo,
       </if>
-      <if test="maxNumber != null" >
+      <if test="maxNumber != null">
         max_number,
       </if>
-      <if test="info != null" >
+      <if test="info != null">
         info,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=SMALLINT},
       </if>
-      <if test="account != null" >
+      <if test="account != null">
         #{account,jdbcType=VARCHAR},
       </if>
-      <if test="nickname != null" >
+      <if test="nickname != null">
         #{nickname,jdbcType=VARCHAR},
       </if>
-      <if test="password != null" >
+      <if test="password != null">
         #{password,jdbcType=CHAR},
       </if>
-      <if test="bindAccount != null" >
+      <if test="bindAccount != null">
         #{bindAccount,jdbcType=VARCHAR},
       </if>
-      <if test="dwdm != null" >
+      <if test="dwdm != null">
         #{dwdm,jdbcType=VARCHAR},
       </if>
-      <if test="lastLoginTime != null" >
+      <if test="lastLoginTime != null">
         #{lastLoginTime,jdbcType=INTEGER},
       </if>
-      <if test="lastLoginIp != null" >
+      <if test="lastLoginIp != null">
         #{lastLoginIp,jdbcType=VARCHAR},
       </if>
-      <if test="loginCount != null" >
+      <if test="loginCount != null">
         #{loginCount,jdbcType=INTEGER},
       </if>
-      <if test="verify != null" >
+      <if test="verify != null">
         #{verify,jdbcType=VARCHAR},
       </if>
-      <if test="email != null" >
+      <if test="email != null">
         #{email,jdbcType=VARCHAR},
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         #{createTime,jdbcType=INTEGER},
       </if>
-      <if test="updateTime != null" >
+      <if test="updateTime != null">
         #{updateTime,jdbcType=INTEGER},
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         #{status,jdbcType=BIT},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         #{type,jdbcType=TINYINT},
       </if>
-      <if test="photo != null" >
+      <if test="photo != null">
         #{photo,jdbcType=VARCHAR},
       </if>
-      <if test="maxNumber != null" >
+      <if test="maxNumber != null">
         #{maxNumber,jdbcType=TINYINT},
       </if>
-      <if test="info != null" >
+      <if test="info != null">
         #{info,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.swust.chargingmobileback.model.User" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.swust.chargingmobileback.model.User">
     update t_user
-    <set >
-      <if test="account != null" >
+    <set>
+      <if test="account != null">
         account = #{account,jdbcType=VARCHAR},
       </if>
-      <if test="nickname != null" >
+      <if test="nickname != null">
         nickname = #{nickname,jdbcType=VARCHAR},
       </if>
-      <if test="password != null" >
+      <if test="password != null">
         password = #{password,jdbcType=CHAR},
       </if>
-      <if test="bindAccount != null" >
+      <if test="bindAccount != null">
         bind_account = #{bindAccount,jdbcType=VARCHAR},
       </if>
-      <if test="dwdm != null" >
+      <if test="dwdm != null">
         dwdm = #{dwdm,jdbcType=VARCHAR},
       </if>
-      <if test="lastLoginTime != null" >
+      <if test="lastLoginTime != null">
         last_login_time = #{lastLoginTime,jdbcType=INTEGER},
       </if>
-      <if test="lastLoginIp != null" >
+      <if test="lastLoginIp != null">
         last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
       </if>
-      <if test="loginCount != null" >
+      <if test="loginCount != null">
         login_count = #{loginCount,jdbcType=INTEGER},
       </if>
-      <if test="verify != null" >
+      <if test="verify != null">
         verify = #{verify,jdbcType=VARCHAR},
       </if>
-      <if test="email != null" >
+      <if test="email != null">
         email = #{email,jdbcType=VARCHAR},
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time = #{createTime,jdbcType=INTEGER},
       </if>
-      <if test="updateTime != null" >
+      <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=INTEGER},
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         status = #{status,jdbcType=BIT},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type = #{type,jdbcType=TINYINT},
       </if>
-      <if test="photo != null" >
+      <if test="photo != null">
         photo = #{photo,jdbcType=VARCHAR},
       </if>
-      <if test="maxNumber != null" >
+      <if test="maxNumber != null">
         max_number = #{maxNumber,jdbcType=TINYINT},
       </if>
-      <if test="info != null" >
+      <if test="info != null">
         info = #{info,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=SMALLINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.swust.chargingmobileback.model.User" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.swust.chargingmobileback.model.User">
     update t_user
     set account = #{account,jdbcType=VARCHAR},
       nickname = #{nickname,jdbcType=VARCHAR},
@@ -263,7 +263,7 @@
       info = #{info,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=SMALLINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.swust.chargingmobileback.model.User" >
+  <update id="updateByPrimaryKey" parameterType="com.swust.chargingmobileback.model.User">
     update t_user
     set account = #{account,jdbcType=VARCHAR},
       nickname = #{nickname,jdbcType=VARCHAR},

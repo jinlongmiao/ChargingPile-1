@@ -65,6 +65,25 @@
             <version>4.3.13.RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <!--fastjson-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.39</version>
+        </dependency>
+
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<optional>true</optional>
+			<version>3.2.8</version>
+		</dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-push</artifactId>
+            <version>3.9.0</version>
+        </dependency>
     </dependencies>
 
 	<build>

@@ -1,4 +1,4 @@
-package com.swust.chargingmobileback.dao;
+package com.swust.chargingmobileback.dao.user;
 
 import com.swust.chargingmobileback.model.User;
 

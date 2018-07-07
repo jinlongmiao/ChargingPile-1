@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.swust.chargingmobileback.dao.user.CustomerMapper" >
+  <resultMap id="BaseResultMap" type="com.swust.chargingmobileback.model.Customer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="car_type" property="carType" jdbcType="VARCHAR" />
+    <result column="charge_card_type" property="chargeCardType" jdbcType="CHAR" />
+    <result column="charge_card_id" property="chargeCardId" jdbcType="CHAR" />
+    <result column="charge_card_money" property="chargeCardMoney" jdbcType="DOUBLE" />
+    <result column="charge_card_state" property="chargeCardState" jdbcType="CHAR" />
+    <result column="state_update_time" property="stateUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="last_trans_uid" property="lastTransUid" jdbcType="CHAR" />
+    <result column="state_update_to_gate_time" property="stateUpdateToGateTime" jdbcType="TIMESTAMP" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="stationid" property="stationid" jdbcType="VARCHAR" />
+    <result column="station_access" property="stationAccess" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="mem" property="mem" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="state_change_type" property="stateChangeType" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, id_card, name, phone, password, car_type, charge_card_type, charge_card_id, charge_card_money, 
+    charge_card_state, state_update_time, last_trans_uid, state_update_to_gate_time, 
+    address, stationid, station_access, create_time, create_user, mem, status, update_time, 
+    update_user, state_change_type
+  </sql>
+  <select id="findCustomerByPhone" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_customer
+    where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_customer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_customer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.swust.chargingmobileback.model.Customer" >
+    insert into t_customer (id, id_card, name, 
+      phone, password, car_type, 
+      charge_card_type, charge_card_id, charge_card_money, 
+      charge_card_state, state_update_time, last_trans_uid, 
+      state_update_to_gate_time, address, stationid, 
+      station_access, create_time, create_user, 
+      mem, status, update_time, 
+      update_user, state_change_type)
+    values (#{id,jdbcType=INTEGER}, #{idCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{carType,jdbcType=VARCHAR}, 
+      #{chargeCardType,jdbcType=CHAR}, #{chargeCardId,jdbcType=CHAR}, #{chargeCardMoney,jdbcType=DOUBLE}, 
+      #{chargeCardState,jdbcType=CHAR}, #{stateUpdateTime,jdbcType=TIMESTAMP}, #{lastTransUid,jdbcType=CHAR}, 
+      #{stateUpdateToGateTime,jdbcType=TIMESTAMP}, #{address,jdbcType=VARCHAR}, #{stationid,jdbcType=VARCHAR}, 
+      #{stationAccess,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{mem,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{stateChangeType,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.swust.chargingmobileback.model.Customer" >
+    insert into t_customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="carType != null" >
+        car_type,
+      </if>
+      <if test="chargeCardType != null" >
+        charge_card_type,
+      </if>
+      <if test="chargeCardId != null" >
+        charge_card_id,
+      </if>
+      <if test="chargeCardMoney != null" >
+        charge_card_money,
+      </if>
+      <if test="chargeCardState != null" >
+        charge_card_state,
+      </if>
+      <if test="stateUpdateTime != null" >
+        state_update_time,
+      </if>
+      <if test="lastTransUid != null" >
+        last_trans_uid,
+      </if>
+      <if test="stateUpdateToGateTime != null" >
+        state_update_to_gate_time,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="stationid != null" >
+        stationid,
+      </if>
+      <if test="stationAccess != null" >
+        station_access,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="mem != null" >
+        mem,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="stateChangeType != null" >
+        state_change_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="carType != null" >
+        #{carType,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeCardType != null" >
+        #{chargeCardType,jdbcType=CHAR},
+      </if>
+      <if test="chargeCardId != null" >
+        #{chargeCardId,jdbcType=CHAR},
+      </if>
+      <if test="chargeCardMoney != null" >
+        #{chargeCardMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="chargeCardState != null" >
+        #{chargeCardState,jdbcType=CHAR},
+      </if>
+      <if test="stateUpdateTime != null" >
+        #{stateUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastTransUid != null" >
+        #{lastTransUid,jdbcType=CHAR},
+      </if>
+      <if test="stateUpdateToGateTime != null" >
+        #{stateUpdateToGateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="stationid != null" >
+        #{stationid,jdbcType=VARCHAR},
+      </if>
+      <if test="stationAccess != null" >
+        #{stationAccess,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="mem != null" >
+        #{mem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="stateChangeType != null" >
+        #{stateChangeType,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.swust.chargingmobileback.model.Customer" >
+    update t_customer
+    <set >
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="carType != null" >
+        car_type = #{carType,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeCardType != null" >
+        charge_card_type = #{chargeCardType,jdbcType=CHAR},
+      </if>
+      <if test="chargeCardId != null" >
+        charge_card_id = #{chargeCardId,jdbcType=CHAR},
+      </if>
+      <if test="chargeCardMoney != null" >
+        charge_card_money = #{chargeCardMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="chargeCardState != null" >
+        charge_card_state = #{chargeCardState,jdbcType=CHAR},
+      </if>
+      <if test="stateUpdateTime != null" >
+        state_update_time = #{stateUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastTransUid != null" >
+        last_trans_uid = #{lastTransUid,jdbcType=CHAR},
+      </if>
+      <if test="stateUpdateToGateTime != null" >
+        state_update_to_gate_time = #{stateUpdateToGateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="stationid != null" >
+        stationid = #{stationid,jdbcType=VARCHAR},
+      </if>
+      <if test="stationAccess != null" >
+        station_access = #{stationAccess,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="mem != null" >
+        mem = #{mem,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="stateChangeType != null" >
+        state_change_type = #{stateChangeType,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.swust.chargingmobileback.model.Customer" >
+    update t_customer
+    set id_card = #{idCard,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      car_type = #{carType,jdbcType=VARCHAR},
+      charge_card_type = #{chargeCardType,jdbcType=CHAR},
+      charge_card_id = #{chargeCardId,jdbcType=CHAR},
+      charge_card_money = #{chargeCardMoney,jdbcType=DOUBLE},
+      charge_card_state = #{chargeCardState,jdbcType=CHAR},
+      state_update_time = #{stateUpdateTime,jdbcType=TIMESTAMP},
+      last_trans_uid = #{lastTransUid,jdbcType=CHAR},
+      state_update_to_gate_time = #{stateUpdateToGateTime,jdbcType=TIMESTAMP},
+      address = #{address,jdbcType=VARCHAR},
+      stationid = #{stationid,jdbcType=VARCHAR},
+      station_access = #{stationAccess,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      mem = #{mem,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      state_change_type = #{stateChangeType,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
