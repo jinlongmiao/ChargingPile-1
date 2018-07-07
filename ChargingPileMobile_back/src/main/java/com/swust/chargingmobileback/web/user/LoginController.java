@@ -32,9 +32,7 @@ public class LoginController {
 
     @PostMapping(value = "/userLogin")
     public JSONObject login(@RequestBody JSONObject requestJson,HttpServletRequest request) {
-
         logger.info("用户登陆模块开始----------------------");
-        logger.info(requestJson.toString());
         return loginService.auth(requestJson,request);
     }
 

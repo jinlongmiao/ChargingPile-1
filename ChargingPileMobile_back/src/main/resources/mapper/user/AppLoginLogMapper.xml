@@ -23,7 +23,7 @@
   <insert id="insert" parameterType="com.swust.chargingmobileback.model.AppLoginLog" >
     insert into t_app_login_log (id, phone, create_time, 
       ip)
-    values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, now(),
       #{ip,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.swust.chargingmobileback.model.AppLoginLog" >

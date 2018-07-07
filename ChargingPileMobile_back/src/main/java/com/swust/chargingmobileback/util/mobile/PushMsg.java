@@ -10,9 +10,11 @@ import com.aliyuncs.push.model.v20160801.PushNoticeToAndroidResponse;
 import com.aliyuncs.push.model.v20160801.PushNoticeToiOSRequest;
 import com.aliyuncs.push.model.v20160801.PushNoticeToiOSResponse;
 import com.aliyuncs.http.ProtocolType;
+import com.swust.chargingmobileback.dao.user.AppUsersMapper;
 import com.swust.chargingmobileback.model.AppUsers;
 import com.swust.chargingmobileback.service.user.LoginService;
 import com.swust.chargingmobileback.service.user.UserService;
+import com.swust.chargingmobileback.util.constants.PullJson;
 
 import javax.annotation.Resource;
 import java.io.FileReader;
@@ -23,33 +25,22 @@ import java.io.FileReader;
  */
 public class PushMsg {
 
-    @Resource
-    private UserService userService;
     /**
      * 推送自定义json
      */
-    private JSONObject pullJson = new JSONObject();
-    public JSONObject getPullJson() {
-        pullJson.put("accessKeyId","LTAIy81J3Pcu1XEe");
-        pullJson.put("accessKeySecret","vFprPvynAFkrnsX8WVEvyDF75T7vlI");
-        pullJson.put("iphoneKey","24925453");
-        pullJson.put("androidKey","24843478");
-        pullJson.put("region","cn-hangzhou");
-        pullJson.put("time",0.3);
-        return pullJson;
-    }
+    PullJson pullJson = new PullJson();
 
     /**
-     * IOS推送下线请求
+     * ISO端处理
      * @param title
      * @param content
      * @param user
      * @param newImei
      * @return
      */
-    public double cancelOtherIos(String title, String content, AppUsers user, String newImei) {
+    public JSONObject cancelOtherIos(String title, String content, AppUsers user, String newImei) {
         // 初始化参数
-        JSONObject pullJsonObj = getPullJson();
+        JSONObject pullJsonObj = pullJson.getPullJson();
         double time = (double) pullJsonObj.get("time");
         String accessKeyId = (String) pullJsonObj.get("accessKeyId");
         String accessKeySecret = (String) pullJsonObj.get("accessKeySecret");
@@ -85,25 +76,27 @@ public class PushMsg {
         System.out.println("oldImei=" + user.getImei() + " , newImei=" + newImei);
         // 更新用户IMEI
         user.setImei(newImei);
-        userService.updateByPrimaryKey(user);
-        return time;
+        JSONObject returnJson = new JSONObject();
+        returnJson.put("newImei",newImei);
+        returnJson.put("time",time);
+        return returnJson;
     }
 
     /**
-     * android推送下线
+     * 移动端处理
      * @param title
      * @param content
      * @param user
      * @param newImei
      * @return
      */
-    public double cancelOtherAndroid(String title, String content, AppUsers user, String newImei) {
+    public JSONObject cancelOtherAndroid(String title, String content, AppUsers user, String newImei) {
         // 初始化参数
-        JSONObject pullJsonObj = getPullJson();
+        JSONObject pullJsonObj = pullJson.getPullJson();
         double time = (double) pullJsonObj.get("time");
         String accessKeyId = (String) pullJsonObj.get("accessKeyId");
         String accessKeySecret = (String) pullJsonObj.get("accessKeySecret");
-        String key = (String) pullJsonObj.get("iphoneKey");
+        String key = (String) pullJsonObj.get("androidKey");
         long appKey = Long.valueOf(key);
         String region = (String) pullJsonObj.get("region");
         IClientProfile profile = DefaultProfile.getProfile(region, accessKeyId, accessKeySecret);
@@ -123,6 +116,7 @@ public class PushMsg {
         androidRequest.setTitle(title);
         androidRequest.setBody(content);
         androidRequest.setExtParameters("{\"k1\":\"v1\"}");
+        PushNoticeToAndroidResponse pushNoticeToAndroidResponse;
         try {
             client.getAcsResponse(androidRequest);
         } catch (Exception e) {
@@ -132,7 +126,11 @@ public class PushMsg {
         System.out.println("oldImei=" + user.getImei() + " , newImei=" + newImei);
         // 更新用户IMEI
         user.setImei(newImei);
-        userService.updateByPrimaryKey(user);
-        return time;
+        System.out.println("user info push msg ===> " + user.toString());
+
+        JSONObject returnJson = new JSONObject();
+        returnJson.put("newImei",newImei);
+        returnJson.put("time",time);
+        return returnJson;
     }
 }
