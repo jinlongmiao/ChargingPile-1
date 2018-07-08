@@ -59,7 +59,6 @@ public class LoginServiceImpl implements LoginService {
             // 登陆成功
             if (customer.getPassword().equals(pwd)) {
                 AppUsers user = appUsersMapper.findUserByPhone(phone);
-                logger.info(user.toString());
                 // 移动用户表没有该用户
                 if (user == null) {
                     user = new AppUsers(customer.getName(), pwd, phone, null,
@@ -67,6 +66,7 @@ public class LoginServiceImpl implements LoginService {
                     appUsersMapper.insert(user);
                     user = appUsersMapper.findUserByPhone(phone);
                 }
+                logger.info(user.toString());
                 if (imei != null) {
                     // 用户更新后第一次登陆
                     if (user.getImei() == null) {

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.swust.chargingmobileback.dao.user.AppFindCostMapper" >
+  <resultMap id="BaseResultMap" type="com.swust.chargingmobileback.model.AppFindCost" >
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="stationName" property="stationname" jdbcType="VARCHAR" />
+    <result column="pileNumber" property="pilenumber" jdbcType="VARCHAR" />
+    <result column="port" property="port" jdbcType="CHAR" />
+    <result column="cost" property="cost" jdbcType="REAL" />
+    <result column="costTime" property="costtime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="allTime" property="alltime" jdbcType="TIME" />
+  </resultMap>
+  <insert id="insert" parameterType="com.swust.chargingmobileback.model.AppFindCost" >
+    insert into t_app_findcost (phone, userName, stationName, 
+      pileNumber, port, cost, costTime, 
+      endTime, allTime)
+    values (#{phone,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{stationname,jdbcType=VARCHAR}, 
+      #{pilenumber,jdbcType=VARCHAR}, #{port,jdbcType=CHAR}, #{cost,jdbcType=REAL}, #{costtime,jdbcType=TIMESTAMP}, 
+      #{endtime,jdbcType=TIMESTAMP}, #{alltime,jdbcType=TIME})
+  </insert>
+  <insert id="insertSelective" parameterType="com.swust.chargingmobileback.model.AppFindCost" >
+    insert into t_app_findcost
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="username != null" >
+        userName,
+      </if>
+      <if test="stationname != null" >
+        stationName,
+      </if>
+      <if test="pilenumber != null" >
+        pileNumber,
+      </if>
+      <if test="port != null" >
+        port,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="costtime != null" >
+        costTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="alltime != null" >
+        allTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="stationname != null" >
+        #{stationname,jdbcType=VARCHAR},
+      </if>
+      <if test="pilenumber != null" >
+        #{pilenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null" >
+        #{port,jdbcType=CHAR},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=REAL},
+      </if>
+      <if test="costtime != null" >
+        #{costtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alltime != null" >
+        #{alltime,jdbcType=TIME},
+      </if>
+    </trim>
+  </insert>
+  <select id="findCost" resultType="com.alibaba.fastjson.JSONObject">
+    select * from t_app_findcost f where phone= #{phone} order by costTime desc limit #{offSet},#{pageRow}
+  </select>
+</mapper>
