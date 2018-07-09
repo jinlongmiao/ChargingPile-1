@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.swust.chargingmobileback.dao.DefinedMapper" >
+    <select id="findPileState" parameterType="java.lang.String" resultType="java.lang.String">
+       SELECT pile_state_code FROM `t_chargingpile` WHERE pileid = #{pileid};
+    </select>
+</mapper>

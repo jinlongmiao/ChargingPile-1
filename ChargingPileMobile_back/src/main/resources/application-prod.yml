@@ -1,9 +1,9 @@
+#配置
 spring:
-<<<<<<< HEAD
   datasource:
     url: jdbc:mysql://localhost:3306/chargingpile
     username: root
-    password: 123456
+    password: lqc13890
     driver-class-name: com.mysql.jdbc.Driver
 
 mybatis:
@@ -13,10 +13,4 @@ mybatis:
 
 #端口
 server:
-  port: 9000
-
-
-=======
-    profiles:
-          active: dev
->>>>>>> 9c1023aa8a89f254ef4e94cb7ae87c6ee0ead892
+  port: 9999

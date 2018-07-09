@@ -6,7 +6,8 @@
 	<groupId>com.swust</groupId>
 	<artifactId>chargingmobileback</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<!--<packaging>jar</packaging>-->
+	<packaging>war</packaging>
 
 	<name>chargingmobileback</name>
 	<description>Project for charge mobile back</description>
@@ -24,7 +25,15 @@
 		<java.version>1.8</java.version>
 	</properties>
 
+
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
