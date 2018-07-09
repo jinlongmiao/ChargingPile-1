@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.swust.chargingmobileback.dao.home.PileTransMapper" >
+  <resultMap id="workMap" type="com.swust.chargingmobileback.model.PileTrans" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="trans_uid" property="transUid" jdbcType="VARCHAR" />
+    <result column="gateid" property="gateid" jdbcType="CHAR" />
+    <result column="pileid" property="pileid" jdbcType="CHAR" />
+    <result column="trans_id" property="transId" jdbcType="CHAR" />
+    <result column="trans_time" property="transTime" jdbcType="TIMESTAMP" />
+    <result column="trans_date" property="transDate" jdbcType="DATE" />
+    <result column="step" property="step" jdbcType="CHAR" />
+    <result column="percent" property="percent" jdbcType="INTEGER" />
+    <result column="pre_v" property="preV" jdbcType="CHAR" />
+    <result column="charge_card_id" property="chargeCardId" jdbcType="CHAR" />
+    <result column="port" property="port" jdbcType="CHAR" />
+    <result column="ac" property="ac" jdbcType="REAL" />
+    <result column="dc" property="dc" jdbcType="REAL" />
+    <result column="s1_money" property="s1Money" jdbcType="REAL" />
+    <result column="s1_preset" property="s1Preset" jdbcType="CHAR" />
+    <result column="s1_charge_type" property="s1ChargeType" jdbcType="CHAR" />
+    <result column="s1_charge_start_type" property="s1ChargeStartType" jdbcType="CHAR" />
+    <result column="s2_money" property="s2Money" jdbcType="REAL" />
+    <result column="s2_hexMoney" property="s2Hexmoney" jdbcType="CHAR" />
+    <result column="s2_rate" property="s2Rate" jdbcType="CHAR" />
+    <result column="s2_isok" property="s2Isok" jdbcType="CHAR" />
+    <result column="s2_reason_end" property="s2ReasonEnd" jdbcType="CHAR" />
+    <result column="s3_money1" property="s3Money1" jdbcType="REAL" />
+    <result column="s3_money2" property="s3Money2" jdbcType="REAL" />
+    <result column="offline" property="offline" jdbcType="BIT" />
+    <result column="ispay" property="ispay" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, trans_uid, gateid, pileid, trans_id, trans_time, trans_date, step, percent, pre_v, 
+    charge_card_id, port, ac, dc, s1_money, s1_preset, s1_charge_type, s1_charge_start_type, 
+    s2_money, s2_hexMoney, s2_rate, s2_isok, s2_reason_end, s3_money1, s3_money2, offline, 
+    ispay, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="workMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_pile_trans
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_pile_trans
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.swust.chargingmobileback.model.PileTrans" >
+    insert into t_pile_trans (id, trans_uid, gateid, 
+      pileid, trans_id, trans_time, 
+      trans_date, step, percent, 
+      pre_v, charge_card_id, port, ac, 
+      dc, s1_money, s1_preset, s1_charge_type, 
+      s1_charge_start_type, s2_money, s2_hexMoney, 
+      s2_rate, s2_isok, s2_reason_end, 
+      s3_money1, s3_money2, offline, 
+      ispay, create_time)
+    values (#{id,jdbcType=INTEGER}, #{transUid,jdbcType=VARCHAR}, #{gateid,jdbcType=CHAR}, 
+      #{pileid,jdbcType=CHAR}, #{transId,jdbcType=CHAR}, #{transTime,jdbcType=TIMESTAMP}, 
+      #{transDate,jdbcType=DATE}, #{step,jdbcType=CHAR}, #{percent,jdbcType=INTEGER}, 
+      #{preV,jdbcType=CHAR}, #{chargeCardId,jdbcType=CHAR}, #{port,jdbcType=CHAR}, #{ac,jdbcType=REAL}, 
+      #{dc,jdbcType=REAL}, #{s1Money,jdbcType=REAL}, #{s1Preset,jdbcType=CHAR}, #{s1ChargeType,jdbcType=CHAR}, 
+      #{s1ChargeStartType,jdbcType=CHAR}, #{s2Money,jdbcType=REAL}, #{s2Hexmoney,jdbcType=CHAR}, 
+      #{s2Rate,jdbcType=CHAR}, #{s2Isok,jdbcType=CHAR}, #{s2ReasonEnd,jdbcType=CHAR}, 
+      #{s3Money1,jdbcType=REAL}, #{s3Money2,jdbcType=REAL}, #{offline,jdbcType=BIT}, 
+      #{ispay,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.swust.chargingmobileback.model.PileTrans" >
+    insert into t_pile_trans
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="transUid != null" >
+        trans_uid,
+      </if>
+      <if test="gateid != null" >
+        gateid,
+      </if>
+      <if test="pileid != null" >
+        pileid,
+      </if>
+      <if test="transId != null" >
+        trans_id,
+      </if>
+      <if test="transTime != null" >
+        trans_time,
+      </if>
+      <if test="transDate != null" >
+        trans_date,
+      </if>
+      <if test="step != null" >
+        step,
+      </if>
+      <if test="percent != null" >
+        percent,
+      </if>
+      <if test="preV != null" >
+        pre_v,
+      </if>
+      <if test="chargeCardId != null" >
+        charge_card_id,
+      </if>
+      <if test="port != null" >
+        port,
+      </if>
+      <if test="ac != null" >
+        ac,
+      </if>
+      <if test="dc != null" >
+        dc,
+      </if>
+      <if test="s1Money != null" >
+        s1_money,
+      </if>
+      <if test="s1Preset != null" >
+        s1_preset,
+      </if>
+      <if test="s1ChargeType != null" >
+        s1_charge_type,
+      </if>
+      <if test="s1ChargeStartType != null" >
+        s1_charge_start_type,
+      </if>
+      <if test="s2Money != null" >
+        s2_money,
+      </if>
+      <if test="s2Hexmoney != null" >
+        s2_hexMoney,
+      </if>
+      <if test="s2Rate != null" >
+        s2_rate,
+      </if>
+      <if test="s2Isok != null" >
+        s2_isok,
+      </if>
+      <if test="s2ReasonEnd != null" >
+        s2_reason_end,
+      </if>
+      <if test="s3Money1 != null" >
+        s3_money1,
+      </if>
+      <if test="s3Money2 != null" >
+        s3_money2,
+      </if>
+      <if test="offline != null" >
+        offline,
+      </if>
+      <if test="ispay != null" >
+        ispay,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="transUid != null" >
+        #{transUid,jdbcType=VARCHAR},
+      </if>
+      <if test="gateid != null" >
+        #{gateid,jdbcType=CHAR},
+      </if>
+      <if test="pileid != null" >
+        #{pileid,jdbcType=CHAR},
+      </if>
+      <if test="transId != null" >
+        #{transId,jdbcType=CHAR},
+      </if>
+      <if test="transTime != null" >
+        #{transTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transDate != null" >
+        #{transDate,jdbcType=DATE},
+      </if>
+      <if test="step != null" >
+        #{step,jdbcType=CHAR},
+      </if>
+      <if test="percent != null" >
+        #{percent,jdbcType=INTEGER},
+      </if>
+      <if test="preV != null" >
+        #{preV,jdbcType=CHAR},
+      </if>
+      <if test="chargeCardId != null" >
+        #{chargeCardId,jdbcType=CHAR},
+      </if>
+      <if test="port != null" >
+        #{port,jdbcType=CHAR},
+      </if>
+      <if test="ac != null" >
+        #{ac,jdbcType=REAL},
+      </if>
+      <if test="dc != null" >
+        #{dc,jdbcType=REAL},
+      </if>
+      <if test="s1Money != null" >
+        #{s1Money,jdbcType=REAL},
+      </if>
+      <if test="s1Preset != null" >
+        #{s1Preset,jdbcType=CHAR},
+      </if>
+      <if test="s1ChargeType != null" >
+        #{s1ChargeType,jdbcType=CHAR},
+      </if>
+      <if test="s1ChargeStartType != null" >
+        #{s1ChargeStartType,jdbcType=CHAR},
+      </if>
+      <if test="s2Money != null" >
+        #{s2Money,jdbcType=REAL},
+      </if>
+      <if test="s2Hexmoney != null" >
+        #{s2Hexmoney,jdbcType=CHAR},
+      </if>
+      <if test="s2Rate != null" >
+        #{s2Rate,jdbcType=CHAR},
+      </if>
+      <if test="s2Isok != null" >
+        #{s2Isok,jdbcType=CHAR},
+      </if>
+      <if test="s2ReasonEnd != null" >
+        #{s2ReasonEnd,jdbcType=CHAR},
+      </if>
+      <if test="s3Money1 != null" >
+        #{s3Money1,jdbcType=REAL},
+      </if>
+      <if test="s3Money2 != null" >
+        #{s3Money2,jdbcType=REAL},
+      </if>
+      <if test="offline != null" >
+        #{offline,jdbcType=BIT},
+      </if>
+      <if test="ispay != null" >
+        #{ispay,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.swust.chargingmobileback.model.PileTrans" >
+    update t_pile_trans
+    <set >
+      <if test="transUid != null" >
+        trans_uid = #{transUid,jdbcType=VARCHAR},
+      </if>
+      <if test="gateid != null" >
+        gateid = #{gateid,jdbcType=CHAR},
+      </if>
+      <if test="pileid != null" >
+        pileid = #{pileid,jdbcType=CHAR},
+      </if>
+      <if test="transId != null" >
+        trans_id = #{transId,jdbcType=CHAR},
+      </if>
+      <if test="transTime != null" >
+        trans_time = #{transTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transDate != null" >
+        trans_date = #{transDate,jdbcType=DATE},
+      </if>
+      <if test="step != null" >
+        step = #{step,jdbcType=CHAR},
+      </if>
+      <if test="percent != null" >
+        percent = #{percent,jdbcType=INTEGER},
+      </if>
+      <if test="preV != null" >
+        pre_v = #{preV,jdbcType=CHAR},
+      </if>
+      <if test="chargeCardId != null" >
+        charge_card_id = #{chargeCardId,jdbcType=CHAR},
+      </if>
+      <if test="port != null" >
+        port = #{port,jdbcType=CHAR},
+      </if>
+      <if test="ac != null" >
+        ac = #{ac,jdbcType=REAL},
+      </if>
+      <if test="dc != null" >
+        dc = #{dc,jdbcType=REAL},
+      </if>
+      <if test="s1Money != null" >
+        s1_money = #{s1Money,jdbcType=REAL},
+      </if>
+      <if test="s1Preset != null" >
+        s1_preset = #{s1Preset,jdbcType=CHAR},
+      </if>
+      <if test="s1ChargeType != null" >
+        s1_charge_type = #{s1ChargeType,jdbcType=CHAR},
+      </if>
+      <if test="s1ChargeStartType != null" >
+        s1_charge_start_type = #{s1ChargeStartType,jdbcType=CHAR},
+      </if>
+      <if test="s2Money != null" >
+        s2_money = #{s2Money,jdbcType=REAL},
+      </if>
+      <if test="s2Hexmoney != null" >
+        s2_hexMoney = #{s2Hexmoney,jdbcType=CHAR},
+      </if>
+      <if test="s2Rate != null" >
+        s2_rate = #{s2Rate,jdbcType=CHAR},
+      </if>
+      <if test="s2Isok != null" >
+        s2_isok = #{s2Isok,jdbcType=CHAR},
+      </if>
+      <if test="s2ReasonEnd != null" >
+        s2_reason_end = #{s2ReasonEnd,jdbcType=CHAR},
+      </if>
+      <if test="s3Money1 != null" >
+        s3_money1 = #{s3Money1,jdbcType=REAL},
+      </if>
+      <if test="s3Money2 != null" >
+        s3_money2 = #{s3Money2,jdbcType=REAL},
+      </if>
+      <if test="offline != null" >
+        offline = #{offline,jdbcType=BIT},
+      </if>
+      <if test="ispay != null" >
+        ispay = #{ispay,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.swust.chargingmobileback.model.PileTrans" >
+    update t_pile_trans
+    set trans_uid = #{transUid,jdbcType=VARCHAR},
+      gateid = #{gateid,jdbcType=CHAR},
+      pileid = #{pileid,jdbcType=CHAR},
+      trans_id = #{transId,jdbcType=CHAR},
+      trans_time = #{transTime,jdbcType=TIMESTAMP},
+      trans_date = #{transDate,jdbcType=DATE},
+      step = #{step,jdbcType=CHAR},
+      percent = #{percent,jdbcType=INTEGER},
+      pre_v = #{preV,jdbcType=CHAR},
+      charge_card_id = #{chargeCardId,jdbcType=CHAR},
+      port = #{port,jdbcType=CHAR},
+      ac = #{ac,jdbcType=REAL},
+      dc = #{dc,jdbcType=REAL},
+      s1_money = #{s1Money,jdbcType=REAL},
+      s1_preset = #{s1Preset,jdbcType=CHAR},
+      s1_charge_type = #{s1ChargeType,jdbcType=CHAR},
+      s1_charge_start_type = #{s1ChargeStartType,jdbcType=CHAR},
+      s2_money = #{s2Money,jdbcType=REAL},
+      s2_hexMoney = #{s2Hexmoney,jdbcType=CHAR},
+      s2_rate = #{s2Rate,jdbcType=CHAR},
+      s2_isok = #{s2Isok,jdbcType=CHAR},
+      s2_reason_end = #{s2ReasonEnd,jdbcType=CHAR},
+      s3_money1 = #{s3Money1,jdbcType=REAL},
+      s3_money2 = #{s3Money2,jdbcType=REAL},
+      offline = #{offline,jdbcType=BIT},
+      ispay = #{ispay,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="stopCharging" resultMap="workMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_pile_trans
+    where trans_uid=#{lastTransUid}
+    order by trans_time desc limit 0,1
+  </select>
+</mapper>

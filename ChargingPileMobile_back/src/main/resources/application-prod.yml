@@ -1,0 +1,16 @@
+#配置
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/chargingpile
+    username: root
+    password: lqc13890
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+   mapperLocations: classpath:/mapper/*.xml,classpath:/mapper/*/*.xml
+   configuration:
+      mapUnderscoreToCamelCase: true
+
+#端口
+server:
+  port: 9999
