@@ -76,4 +76,16 @@ public class AppUsers {
     public void setImei(String imei) {
         this.imei = imei == null ? null : imei.trim();
     }
+
+    @Override
+    public String toString() {
+        return "AppUsers{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", mail='" + mail + '\'' +
+                ", imei='" + imei + '\'' +
+                '}';
+    }
 }

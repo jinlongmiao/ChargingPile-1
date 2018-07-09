@@ -44,9 +44,9 @@ public class LoginServiceImpl implements LoginService {
         // 电话号码
         String phone = requestObj.getString("phone");
         // 用户密码
-        String pwd = requestObj.getString("pwd");
+        String pwd = ThreeDESUtil.decrypt(requestObj.getString("pwd"));
         // IMEI号，手机唯一识别码
-        String imei = requestObj.getString("imei");
+        String imei =  ThreeDESUtil.decrypt(requestObj.getString("imei"));
         // 设备标识，判断是否是苹果请求
         String deviceType = requestObj.getString("deviceType");
         List<Customer> customers = customerMapper.findCustomerByPhone(phone);
@@ -57,13 +57,8 @@ public class LoginServiceImpl implements LoginService {
         if (customers.size() > 0) {
             customer = customers.get(0);
             // 登陆成功
-            System.out.println("customer不为NUll");
-
             if (customer.getPassword().equals(pwd)) {
                 AppUsers user = appUsersMapper.findUserByPhone(phone);
-
-                System.out.println(user.getName());
-
                 // 移动用户表没有该用户
                 if (user == null) {
                     user = new AppUsers(customer.getName(), pwd, phone, null,
@@ -71,6 +66,7 @@ public class LoginServiceImpl implements LoginService {
                     appUsersMapper.insert(user);
                     user = appUsersMapper.findUserByPhone(phone);
                 }
+                logger.info(user.toString());
                 if (imei != null) {
                     // 用户更新后第一次登陆
                     if (user.getImei() == null) {
@@ -80,14 +76,18 @@ public class LoginServiceImpl implements LoginService {
                     // 多台手机登陆同一账号
                     else if (!imei.equals(user.getImei())) {
                         PushMsg pushMsg = new PushMsg();
+                        JSONObject pushObj = new JSONObject();
                         // 强制另一个用户退出登录状态
                         if ("iphone".equals(deviceType)) {
-                            time = pushMsg.cancelOtherIos("下线通知",
+                            pushObj = pushMsg.cancelOtherIos("下线通知",
                                     "您的账号已于另一台设备上登录，请退出后重新登录！", user, imei);
                         } else {
-                            time = pushMsg.cancelOtherAndroid("下线通知",
+                            pushObj = pushMsg.cancelOtherAndroid("下线通知",
                                     "您的账号已于另一台设备上登录，请重新登录！", user, imei);
                         }
+                        time = pushObj.getDouble("time");
+                        user.setImei(pushObj.getString("newImei"));
+                        appUsersMapper.updateByPrimaryKey(user);
                     }
                 }
                 /**
@@ -95,7 +95,6 @@ public class LoginServiceImpl implements LoginService {
                  */
                 String token = ""
                         + (long) (System.currentTimeMillis() / 1000 + time * 60 * 60);
-                System.out.println("token=" + token);
                 token = ThreeDESUtil.encrypt(token);
                 jsonObj.put("flag", 2);
                 jsonObj.put("name", customer.getName());
@@ -109,7 +108,6 @@ public class LoginServiceImpl implements LoginService {
             }
         } else {
             // 尚未注册
-            System.out.println("尚未注册");
             jsonObj.put("flag", 0);
         }
 
@@ -117,7 +115,7 @@ public class LoginServiceImpl implements LoginService {
         return jsonObj;
     }
 
-    public AppLoginLog getAppLoginLog(String phone,HttpServletRequest request){
+    private AppLoginLog getAppLoginLog(String phone,HttpServletRequest request){
         AppLoginLog appLoginLog = new AppLoginLog();
         appLoginLog.setPhone(phone);
         appLoginLog.setIp(IpAddr.getIpAddr(request));

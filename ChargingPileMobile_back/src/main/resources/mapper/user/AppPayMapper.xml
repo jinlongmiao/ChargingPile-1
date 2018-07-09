@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.swust.chargingmobileback.dao.user.AppPayMapper" >
+  <resultMap id="BaseResultMap" type="com.swust.chargingmobileback.model.AppPay" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="subject" property="subject" jdbcType="VARCHAR" />
+    <result column="money_before" property="moneyBefore" jdbcType="DOUBLE" />
+    <result column="total_fee" property="totalFee" jdbcType="DOUBLE" />
+    <result column="out_trade_no" property="outTradeNo" jdbcType="VARCHAR" />
+    <result column="transcation_id" property="transcationId" jdbcType="VARCHAR" />
+    <result column="notify_time" property="notifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, phone, subject, money_before, total_fee, out_trade_no, transcation_id, notify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_pay
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="findPay" resultType="com.alibaba.fastjson.JSONObject">
+    select
+    notify_time,
+    total_fee as total_amount,
+    subject,
+    out_trade_no as trade_no
+    from t_app_pay
+    where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_app_pay
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.swust.chargingmobileback.model.AppPay" >
+    insert into t_app_pay (id, phone, subject, 
+      money_before, total_fee, out_trade_no, 
+      transcation_id, notify_time)
+    values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, 
+      #{moneyBefore,jdbcType=DOUBLE}, #{totalFee,jdbcType=DOUBLE}, #{outTradeNo,jdbcType=VARCHAR}, 
+      #{transcationId,jdbcType=VARCHAR}, #{notifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.swust.chargingmobileback.model.AppPay" >
+    insert into t_app_pay
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="subject != null" >
+        subject,
+      </if>
+      <if test="moneyBefore != null" >
+        money_before,
+      </if>
+      <if test="totalFee != null" >
+        total_fee,
+      </if>
+      <if test="outTradeNo != null" >
+        out_trade_no,
+      </if>
+      <if test="transcationId != null" >
+        transcation_id,
+      </if>
+      <if test="notifyTime != null" >
+        notify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null" >
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyBefore != null" >
+        #{moneyBefore,jdbcType=DOUBLE},
+      </if>
+      <if test="totalFee != null" >
+        #{totalFee,jdbcType=DOUBLE},
+      </if>
+      <if test="outTradeNo != null" >
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="transcationId != null" >
+        #{transcationId,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyTime != null" >
+        #{notifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.swust.chargingmobileback.model.AppPay" >
+    update t_app_pay
+    <set >
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null" >
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyBefore != null" >
+        money_before = #{moneyBefore,jdbcType=DOUBLE},
+      </if>
+      <if test="totalFee != null" >
+        total_fee = #{totalFee,jdbcType=DOUBLE},
+      </if>
+      <if test="outTradeNo != null" >
+        out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="transcationId != null" >
+        transcation_id = #{transcationId,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyTime != null" >
+        notify_time = #{notifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.swust.chargingmobileback.model.AppPay" >
+    update t_app_pay
+    set phone = #{phone,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      money_before = #{moneyBefore,jdbcType=DOUBLE},
+      total_fee = #{totalFee,jdbcType=DOUBLE},
+      out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      transcation_id = #{transcationId,jdbcType=VARCHAR},
+      notify_time = #{notifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

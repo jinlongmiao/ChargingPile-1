@@ -3,6 +3,16 @@ package com.swust.chargingmobileback.model;
 import java.util.Date;
 
 public class AppLoginLog {
+    @Override
+    public String toString() {
+        return "AppLoginLog{" +
+                "id=" + id +
+                ", phone='" + phone + '\'' +
+                ", createTime=" + createTime +
+                ", ip='" + ip + '\'' +
+                '}';
+    }
+
     private Integer id;
 
     private String phone;
